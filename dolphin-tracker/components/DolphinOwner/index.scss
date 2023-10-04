@@ -1,0 +1,69 @@
+
+h1 {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Style the list of owners */
+ul {
+  text-align: center;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  color: aqua;
+}
+
+li {
+  text-align: center;
+  color: aqua;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+/* Hover effect on list items */
+li:hover {
+  background-color: #e0e0e0;
+}
+
+/* DolphinOwnerStyles.scss */
+/* Import any necessary fonts and define global styles */
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+/* Define the styles for the .tabs-content element */
+.tabs-content {
+  font-family: 'Open Sans', sans-serif;
+  background-color: #fff;
+  color: #333;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 0; /* Remove margin from the last child */
+  margin-top: 0; /* Remove margin from the first child */
+}
+
+/* Define global styles */
+* {
+  box-sizing: border-box;
+}
+
+/* Define the styles for the body and HTML */
+body, html {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 24px;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+}
+
+/* Define the styles for text selection */
+::selection {
+  background: #b3d4fc;
+  text-shadow: none;
+}

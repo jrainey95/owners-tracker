@@ -1,0 +1,31 @@
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+ 
+  color: rgb(0, 0, 0);
+  padding: 1rem;
+  text-align: center;
+}
+
+main, p {
+  flex-grow: 1;
+  padding: 1rem;
+}
+
+footer {
+
+  color: rgb(0, 0, 0);
+  padding: 1rem;
+  text-align: center;
+}
+
+p { 
+  color: rgb(0, 0, 0);
+  padding: 1rem;
+  text-align: center;
+}
