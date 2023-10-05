@@ -1,69 +1,66 @@
-
-h1 {
-  font-size: 24px;
-  text-align: center;
-  margin-bottom: 20px;
+.scrollable-content {
+  margin-left: 20px;
+  margin-right: 20px;
+  max-height: 1000px;
+  /* Adjust the max-height as needed */
+  overflow-y: auto;
 }
 
-/* Style the list of owners */
-ul {
-  text-align: center;
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  color: aqua;
+tr td.racecourse:first-child {
+  background-color: #d9f3fd;
 }
 
-li {
-  text-align: center;
-  color: aqua;
-  margin-bottom: 10px;
+.ui-accordion .ui-accordion__header {
+  color: #0037b2;
+  font-size: 20px;
+  padding: 16px 8px;
+  border: 1px solid #efefef;
+  border-bottom-width: 3px;
+  font-weight: 600;
+  background-color: #ffffff;
+}
+
+.table-container {
   border: 1px solid #ccc;
-  padding: 10px;
-  background-color: #f9f9f9;
-}
-
-/* Hover effect on list items */
-li:hover {
-  background-color: #e0e0e0;
-}
-
-/* DolphinOwnerStyles.scss */
-/* Import any necessary fonts and define global styles */
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
-
-/* Define the styles for the .tabs-content element */
-.tabs-content {
-  font-family: 'Open Sans', sans-serif;
-  background-color: #fff;
-  color: #333;
   padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 0; /* Remove margin from the last child */
-  margin-top: 0; /* Remove margin from the first child */
+  margin: 20px;
+  overflow-x: auto;
+  /* Enable horizontal scrolling if needed */
 }
 
-/* Define global styles */
-* {
-  box-sizing: border-box;
+body {
+  color:#333;
+}
+/* Styling for the table */
+table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-/* Define the styles for the body and HTML */
-body, html {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 16px;
-  font-weight: 300;
-  line-height: 24px;
-  color: #333;
-  margin: 0;
-  padding: 0;
+/* Styling for table header (<thead>) */
+thead {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+/* Styling for table rows (<tr>) */
+tr {
   background-color: #fff;
 }
 
-/* Define the styles for text selection */
-::selection {
-  background: #b3d4fc;
-  text-shadow: none;
+
+/* Optional: Additional styling for table cells (<td>) if needed */
+td {
+  
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+table tr th {
+  font-family: 'Open Sans', sans-serif;
+  padding: 8px;
+  color: #fff;
+  background-color: #0037b2;
+  text-align: left;
+  font-size: 15px;
+  font-weight: 400;
 }
