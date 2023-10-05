@@ -6,6 +6,15 @@
   overflow-y: auto;
 }
 
+/* Add styles to position the race times container to the right */
+.race-times-container {
+  flex: 1;
+  /* Allow the container to grow and take available space */
+  padding-left: 2008px;
+  margin-bottom: 10000px;
+  /* Add some spacing from the content container */
+}
+
 tr td.racecourse:first-child {
   background-color: #d9f3fd;
 }
