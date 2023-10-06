@@ -1,5 +1,6 @@
 /* index.scss */
 .container {
+  background-color: #0037b2;
   display: flex;
   justify-content: space-between;
   margin: 20px;
@@ -36,7 +37,7 @@ tr td:first-child {
 }
 
 /* Style the accordion header */
-.ui-accordion .ui-accordion__header {
+.ui-accordion .ui-accordion__header  {
   color: #0037b2;
   font-size: 20px;
   padding: 16px 8px;
@@ -87,7 +88,31 @@ table tr th {
   font-weight: 400;
 }
 
+th.horse {
+  font-family: 'Open Sans', sans-serif;
+  padding: 18px 8px; /* Adjust the padding as needed */
+  color: #fff;
+  background-color: #0037b2;
+  font-size: 15px;
+  font-weight: 400;
+}
 body {
   overflow-y: auto;
   color: #333;
+}
+
+header {
+  color: #0037b2;
+  font-size: 20px;
+  padding: 16px 8px;
+  border: 1px solid #efefef;
+  border-bottom-width: 3px;
+  font-weight: 600;
+  background-color: #ffffff;
+}
+
+td.horse {
+    font: 300 14px/1.4 "Helvetica Neue", sans-serif;
+    padding: 20px;
+    border: 1px solid #ddd;
 }

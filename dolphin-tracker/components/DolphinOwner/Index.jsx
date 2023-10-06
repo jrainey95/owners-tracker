@@ -1,4 +1,3 @@
-// DolphinOwner.js
 import React, { useState, useEffect } from "react";
 import parse from "html-react-parser";
 import "./index.scss";
@@ -6,13 +5,15 @@ import "./index.scss";
 function DolphinOwner() {
   const [data, setData] = useState("");
   const [raceTimes, setRaceTimes] = useState([]);
+  const [horseNames, setHorseNames] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:3001/api/fetchData")
       .then((response) => response.text())
       .then((html) => {
         setData(html);
-        extractRaceTimes(html); // Extract race times from HTML
+        extractRaceTimes(html);
+        extractHorseNames(html);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -34,6 +35,20 @@ function DolphinOwner() {
       setRaceTimes(raceTimesPST);
     }
   };
+  const extractHorseNames = (html) => {
+    const horseNameRegex =
+      /<div class="pure-u-2-3 pure-u-sm-1 horse-name"><a[^>]*>([^<]+)<\/a><\/div>/g;
+    const matches = html.match(horseNameRegex);
+
+    if (matches) {
+      const horseNames = matches.map((match) => {
+        return match.match(
+          /<div class="pure-u-2-3 pure-u-sm-1 horse-name"><a[^>]*>([^<]+)<\/a><\/div>/
+        )[1];
+      });
+      setHorseNames(horseNames);
+    }
+  };
 
   // Function to calculate and format time until race
   const getTimeUntilRace = (raceTime) => {
@@ -48,6 +63,32 @@ function DolphinOwner() {
     return `${hoursUntilRace}h ${minutesUntilRace}m`;
   };
 
+  // ...
+
+  // Function to extract the day from a given date string
+  
+  // Function to extract the date from HTML
+  const extractDate = (html) => {
+    const dateRegex = /<span class="header__text">([^<]+)<\/span>/;
+    const match = html.match(dateRegex);
+    
+    if (match) {
+      const extractedDate = match[1]; // Extracted date
+      const dayOfWeek = extractDay(extractedDate); // Extracted day of the week
+      return `${dayOfWeek}, ${extractedDate}`;
+    }
+    
+    return ""; // Default value if not found
+  };
+  
+  const extractDay = (dateString) => {
+    const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const dateObj = new Date(dateString);
+    const dayOfWeek = daysOfWeek[dateObj.getDay()];
+    return dayOfWeek;
+  };
+  // ...
+
   return (
     <div className="container">
       <div className="scrollable-content">
@@ -56,33 +97,48 @@ function DolphinOwner() {
       </div>
 
       <div className="time-content">
-        <div className="time-container"></div>
+        <div className="time-container">
+          <header className="track">{extractDate(data)}</header>
+          
+        </div>
         <table>
           <thead>
-            <head>Day</head>
             <tr>
-              <th>Horse</th>
+              <th className="horse">Horse</th>
               <th>PST Time</th>
               <th>Time Until Race</th>
+              <th>Alert</th>
+              <th>Save Horse</th>
             </tr>
           </thead>
           <tbody>
             {raceTimes.map((raceTime, index) => (
               <tr key={index}>
-                <td></td>
+                <td className="horse">{horseNames[index]}</td>
                 <td>
                   {raceTime.toLocaleTimeString("en-US", {
                     timeZone: "America/Los_Angeles",
                   })}
                 </td>
                 <td>{getTimeUntilRace(raceTime)}</td>
+                <td>
+                  <button className="button-alert">ALERT</button>
+                  <button className="button-alert-all">ALERT ALL</button>
+                </td>
+                <td>
+                  <button className="button-save">SAVE</button>
+                </td>
               </tr>
+        //       <div className="time-container">
+        //   {/* <header className="track">{extractDate(data)}</header> */}
+        // </div>
             ))}
           </tbody>
         </table>
       </div>
     </div>
   );
+  // ...
 }
 
 export default DolphinOwner;
