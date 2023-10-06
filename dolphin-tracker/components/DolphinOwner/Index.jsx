@@ -35,17 +35,20 @@ function DolphinOwner() {
       setRaceTimes(raceTimesPST);
     }
   };
-const extractHorseNames = (html) => {
-  const horseNameRegex = /<div class="pure-u-2-3 pure-u-sm-1 horse-name"><a[^>]*>([^<]+)<\/a><\/div>/g;
-  const matches = html.match(horseNameRegex);
+  const extractHorseNames = (html) => {
+    const horseNameRegex =
+      /<div class="pure-u-2-3 pure-u-sm-1 horse-name"><a[^>]*>([^<]+)<\/a><\/div>/g;
+    const matches = html.match(horseNameRegex);
 
-  if (matches) {
-    const horseNames = matches.map((match) => {
-      return match.match(/<div class="pure-u-2-3 pure-u-sm-1 horse-name"><a[^>]*>([^<]+)<\/a><\/div>/)[1];
-    });
-    setHorseNames(horseNames);
-  }
-};
+    if (matches) {
+      const horseNames = matches.map((match) => {
+        return match.match(
+          /<div class="pure-u-2-3 pure-u-sm-1 horse-name"><a[^>]*>([^<]+)<\/a><\/div>/
+        )[1];
+      });
+      setHorseNames(horseNames);
+    }
+  };
 
   // Function to calculate and format time until race
   const getTimeUntilRace = (raceTime) => {
@@ -60,6 +63,32 @@ const extractHorseNames = (html) => {
     return `${hoursUntilRace}h ${minutesUntilRace}m`;
   };
 
+  // ...
+
+  // Function to extract the day from a given date string
+  
+  // Function to extract the date from HTML
+  const extractDate = (html) => {
+    const dateRegex = /<span class="header__text">([^<]+)<\/span>/;
+    const match = html.match(dateRegex);
+    
+    if (match) {
+      const extractedDate = match[1]; // Extracted date
+      const dayOfWeek = extractDay(extractedDate); // Extracted day of the week
+      return `${dayOfWeek}, ${extractedDate}`;
+    }
+    
+    return ""; // Default value if not found
+  };
+  
+  const extractDay = (dateString) => {
+    const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const dateObj = new Date(dateString);
+    const dayOfWeek = daysOfWeek[dateObj.getDay()];
+    return dayOfWeek;
+  };
+  // ...
+
   return (
     <div className="container">
       <div className="scrollable-content">
@@ -69,14 +98,17 @@ const extractHorseNames = (html) => {
 
       <div className="time-content">
         <div className="time-container">
-          <header className="track">TIME</header>
-          </div>
+          <header className="track">{extractDate(data)}</header>
+          
+        </div>
         <table>
           <thead>
             <tr>
               <th className="horse">Horse</th>
               <th>PST Time</th>
               <th>Time Until Race</th>
+              <th>Alert</th>
+              <th>Save Horse</th>
             </tr>
           </thead>
           <tbody>
@@ -89,13 +121,24 @@ const extractHorseNames = (html) => {
                   })}
                 </td>
                 <td>{getTimeUntilRace(raceTime)}</td>
+                <td>
+                  <button className="button-alert">ALERT</button>
+                  <button className="button-alert-all">ALERT ALL</button>
+                </td>
+                <td>
+                  <button className="button-save">SAVE</button>
+                </td>
               </tr>
+        //       <div className="time-container">
+        //   {/* <header className="track">{extractDate(data)}</header> */}
+        // </div>
             ))}
           </tbody>
         </table>
       </div>
     </div>
   );
+  // ...
 }
 
 export default DolphinOwner;
