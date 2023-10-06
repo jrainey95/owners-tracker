@@ -1,15 +1,41 @@
+/* index.scss */
+.container {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
+}
+
 .scrollable-content {
-  margin-left: 20px;
-  margin-right: 20px;
-  max-height: 1000px;
-  /* Adjust the max-height as needed */
+  max-height: 10000px;
+  flex: 1;
   overflow-y: auto;
 }
 
-tr td.racecourse:first-child {
+.time-content {
+  flex: 1;
+  margin-left: 20px;
+  /* Add spacing from the scrollable-content */
+  /* Add any other styles for the time-content here */
+}
+
+/* Add styles for the time-container and table as needed */
+/* Adjust the race times container */
+.race-times-container {
+  flex: 1;
+  margin-left: 20px;
+  /* Add spacing from the content container */
+  padding-left: 0;
+  /* Remove the excessive padding */
+  margin-bottom: 0;
+  /* Remove excessive margin */
+}
+
+/* Style the first cell in each row */
+tr td:first-child {
   background-color: #d9f3fd;
 }
 
+/* Style the accordion header */
 .ui-accordion .ui-accordion__header {
   color: #0037b2;
   font-size: 20px;
@@ -20,47 +46,48 @@ tr td.racecourse:first-child {
   background-color: #ffffff;
 }
 
+/* Style the table container with horizontal scrolling */
 .table-container {
   border: 1px solid #ccc;
   padding: 20px;
   margin: 20px;
   overflow-x: auto;
-  /* Enable horizontal scrolling if needed */
 }
 
-body {
-  color:#333;
-}
-/* Styling for the table */
+/* Style the table */
 table {
   width: 100%;
   border-collapse: collapse;
 }
 
-/* Styling for table header (<thead>) */
+/* Style the table header */
 thead {
   background-color: #f0f0f0;
   font-weight: bold;
 }
 
-/* Styling for table rows (<tr>) */
+/* Style the table rows */
 tr {
   background-color: #fff;
 }
 
-
-/* Optional: Additional styling for table cells (<td>) if needed */
+/* Style table cells */
 td {
-  
   padding: 10px;
   border: 1px solid #ddd;
 }
+
+/* Style table header cells */
 table tr th {
   font-family: 'Open Sans', sans-serif;
-  padding: 8px;
+  padding: 16px 8px;
   color: #fff;
   background-color: #0037b2;
-  text-align: left;
   font-size: 15px;
   font-weight: 400;
+}
+
+body {
+  overflow-y: auto;
+  color: #333;
 }
