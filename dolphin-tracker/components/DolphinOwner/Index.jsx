@@ -1,3 +1,4 @@
+// DolphinOwner.js
 import React, { useState, useEffect } from "react";
 import parse from "html-react-parser";
 import "./index.scss";
@@ -48,23 +49,37 @@ function DolphinOwner() {
   };
 
   return (
-    <div className="content-container">
-      <h1 className="page-title">Dolphin Owner Data</h1>
+    <div className="container">
       <div className="scrollable-content">
+        <div className="dolphin-content"></div>
         {parse(data)}
-        <div className="race-times-container">
-          {raceTimes.map((raceTime, index) => (
-            <div key={index} className="race-time">
-              <div>
-                Race Time (PST):{" "}
-                {raceTime.toLocaleTimeString("en-US", {
-                  timeZone: "America/Los_Angeles",
-                })}
-              </div>
-              <div>Time Until Race: {getTimeUntilRace(raceTime)}</div>
-            </div>
-          ))}
-        </div>
+      </div>
+
+      <div className="time-content">
+        <div className="time-container"></div>
+        <table>
+          <thead>
+            <head>Day</head>
+            <tr>
+              <th>Horse</th>
+              <th>PST Time</th>
+              <th>Time Until Race</th>
+            </tr>
+          </thead>
+          <tbody>
+            {raceTimes.map((raceTime, index) => (
+              <tr key={index}>
+                <td></td>
+                <td>
+                  {raceTime.toLocaleTimeString("en-US", {
+                    timeZone: "America/Los_Angeles",
+                  })}
+                </td>
+                <td>{getTimeUntilRace(raceTime)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
