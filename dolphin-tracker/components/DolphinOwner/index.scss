@@ -54,6 +54,10 @@ tr td:first-child {
   margin: 20px;
   overflow-x: auto;
 }
+::selection {
+  background: #b3d4fc;
+  text-shadow: none;
+}
 
 /* Style the table */
 table {
