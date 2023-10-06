@@ -1,4 +1,3 @@
-// DolphinOwner.js
 import React, { useState, useEffect } from "react";
 import parse from "html-react-parser";
 import "./index.scss";
@@ -6,13 +5,15 @@ import "./index.scss";
 function DolphinOwner() {
   const [data, setData] = useState("");
   const [raceTimes, setRaceTimes] = useState([]);
+  const [horseNames, setHorseNames] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:3001/api/fetchData")
       .then((response) => response.text())
       .then((html) => {
         setData(html);
-        extractRaceTimes(html); // Extract race times from HTML
+        extractRaceTimes(html);
+        extractHorseNames(html);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -34,6 +35,17 @@ function DolphinOwner() {
       setRaceTimes(raceTimesPST);
     }
   };
+const extractHorseNames = (html) => {
+  const horseNameRegex = /<div class="pure-u-2-3 pure-u-sm-1 horse-name"><a[^>]*>([^<]+)<\/a><\/div>/g;
+  const matches = html.match(horseNameRegex);
+
+  if (matches) {
+    const horseNames = matches.map((match) => {
+      return match.match(/<div class="pure-u-2-3 pure-u-sm-1 horse-name"><a[^>]*>([^<]+)<\/a><\/div>/)[1];
+    });
+    setHorseNames(horseNames);
+  }
+};
 
   // Function to calculate and format time until race
   const getTimeUntilRace = (raceTime) => {
@@ -56,12 +68,13 @@ function DolphinOwner() {
       </div>
 
       <div className="time-content">
-        <div className="time-container"></div>
+        <div className="time-container">
+          <header className="track">TIME</header>
+          </div>
         <table>
           <thead>
-            <head>Day</head>
             <tr>
-              <th>Horse</th>
+              <th className="horse">Horse</th>
               <th>PST Time</th>
               <th>Time Until Race</th>
             </tr>
@@ -69,7 +82,7 @@ function DolphinOwner() {
           <tbody>
             {raceTimes.map((raceTime, index) => (
               <tr key={index}>
-                <td></td>
+                <td className="horse">{horseNames[index]}</td>
                 <td>
                   {raceTime.toLocaleTimeString("en-US", {
                     timeZone: "America/Los_Angeles",
