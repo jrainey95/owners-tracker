@@ -28,12 +28,13 @@ function DolphinOwner() {
 
     const worldTimes = {
       Jpn: "Asia/Tokyo", // Japan (JST)
-      Sydney: "Australia/Sydney", // Sydney (AEDT)
+      SydneyAEDT: "Australia/Sydney", // Sydney (AEDT)
+      SydneyAEST: "Australia/Brisbane", // Sydney (AEST)
       EST: "America/New_York", // Eastern Standard Time (EST)
       GB: "Europe/London", // Great Britain (GMT)
       PST: "America/Los_Angeles", // Pacific Standard Time (PST)
       FR: "Europe/Paris", // Chantilly, France (CET)
-      AUS: "Australia/Sydney", // Rosehill, Australia (AEDT)
+      USA: "America/New_York",
     };
 
     $(".race__day").each((index, element) => {
@@ -50,30 +51,30 @@ function DolphinOwner() {
           // Parse the local time and set the time zone
           const localTime = moment.tz(timeLocal, "HH:mm", worldTimes.EST);
 
-          // Determine the current time
-          // const currentTime = moment.tz(worldTimes.EST);
-
-          // Calculate the difference in hours between local time and midnight AEDT
-          // Calculate the difference in hours between local time and midnight AEDT
-          // Calculate the difference in hours between local time and midnight AEDT
-          const differenceHours = localTime.diff(
-            moment.tz("00:00", "HH:mm", worldTimes.AUS),
-            "hours"
-          );
-
-          // Check if the difference is greater than or equal to 10 hours, subtract one day
-          if (differenceHours >= 12) {
-            localTime.subtract(1, "day");
+          // Determine the current time zone based on location
+          let timeZone = worldTimes.EST;
+          if (racecourse === "AUS") {
+            timeZone =
+              localTime.isDST() && localTime.isDST() === true
+                ? worldTimes.SydneyAEDT
+                : worldTimes.SydneyAEST;
+          } else if (racecourse === "Jpn") {
+            timeZone = worldTimes.Jpn;
+          } else if (racecourse === "USA") {
+            timeZone = worldTimes.USA;
           }
 
-          // Convert to PST (Pacific Standard Time)
-          const pstTime = localTime.clone().tz(worldTimes.PST);
+          // Calculate the JST time (+9 from GMT) and PST time (-7 from JST)
+          const jstTime = localTime.clone().tz(timeZone).add(0, "hours");
+          const pstTime = jstTime.clone().subtract(16, "hours");
+      
 
           horseData.push({
             raceDay: raceDate,
             horseName,
             racecourse,
             timeLocal: localTime.format("hh:mm A"), // Convert to AM/PM format
+            timeJST: jstTime.format("hh:mm A"), // Convert to AM/PM format
             timePST: pstTime.format("hh:mm A"), // Convert to AM/PM format
           });
         });
@@ -89,7 +90,7 @@ function DolphinOwner() {
     return (
       <tbody key={date}>
         <tr>
-          <th colSpan="6" className="th-colspan">
+          <th colSpan="7" className="th-colspan">
             {date}
           </th>
         </tr>
@@ -100,6 +101,7 @@ function DolphinOwner() {
               <td>{horse.racecourse}</td>
               <td className="name">{horse.horseName}</td>
               <td>{horse.timeLocal}</td>
+              <td>{horse.timeJST}</td>
               <td>{horse.timePST}</td>
               <td>
                 <button className="button-alert">ALERT</button>
@@ -132,6 +134,7 @@ function DolphinOwner() {
                 <th>Racecourse</th>
                 <th className="horse">Horse</th>
                 <th>Local Time</th>
+                <th>JST</th>
                 <th>PST</th>
                 <th>Alert</th>
                 <th>Save Horse</th>
