@@ -52,6 +52,7 @@ app.get("/api/fetchData", async (req, res) => {
 
     if (mainContent) {
       // Send the content of the specific div as the response
+      // res.send(mainContent);
       res.send(mainContent);
     } else {
       res.status(404).json({ error: "Main content not found" });

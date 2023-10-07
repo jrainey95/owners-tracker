@@ -1,20 +1,14 @@
 import React, { useState, useEffect } from "react";
 import parse from "html-react-parser";
-import "./index.scss";
 import cheerio from "cheerio";
+import moment from "moment-timezone"; // Import Moment.js for timezone conversion
+import Time from "../Time/Index";
+import "./index.scss";
 
 function DolphinOwner() {
   const [data, setData] = useState("");
   const [horseData, setHorseData] = useState([]);
   const [headerDate, setHeaderDate] = useState("");
-  
-  const [locationsByDay, setLocationsByDay] = useState({});
-  const [chantillyTime, setChantillyTime] = useState("");
-  const [kensingtonTime, setKensingtonTime] = useState("");
-  const [kemptonTime, setKemptonTime] = useState("");
-  const [kentuckyTime, setKentuckyTime] = useState("");
-  const [rosehillTime, setRosehillTime] = useState("");
-  const [pstTime, setPstTime] = useState("");
 
   useEffect(() => {
     fetch("http://localhost:3001/api/fetchData")
@@ -22,37 +16,6 @@ function DolphinOwner() {
       .then((html) => {
         setData(html);
         extractHorseData(html);
-         const chantillyNow = new Date().toLocaleString("fr-FR", {
-           timeZone: "Europe/Paris", // Chantilly, France
-         });
-         setChantillyTime(formatTime(chantillyNow));
-
-         const kentuckyNow = new Date().toLocaleString("en-US", {
-           timeZone: "America/New_York", // Kentucky, USA (Eastern Time Zone)
-         });
-         setKentuckyTime(formatTime(kentuckyNow));
-
-         const rosehillNow = new Date().toLocaleString("en-US", {
-           timeZone: "Australia/Queensland", // New South Wales, Australia
-         });
-         setRosehillTime(formatTime(rosehillNow));
-
-         const kensingtonNow = new Date().toLocaleString("en-AU", {
-           timeZone: "Australia/Sydney", // Kensington, Australia
-         });
-         setKensingtonTime(formatTime(kensingtonNow));
-
-         const kemptonNow = new Date().toLocaleString("en-GB", {
-           timeZone: "Europe/London", // Kempton, England
-         });
-         const kemptonTimeInMs = new Date(kemptonNow).getTime();
-         const pstTimeInMs = kemptonTimeInMs - 8 * 60 * 60 * 1000; // 8 hours behind
-         const pstTimeStr = new Date(pstTimeInMs).toLocaleString("en-US", {
-           timeZone: "America/Los_Angeles",
-         });
-         setKemptonTime(formatTime(kemptonNow));
-
-         setPstTime(formatTime(pstTimeStr));
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -62,6 +25,16 @@ function DolphinOwner() {
   const extractHorseData = (html) => {
     const $ = cheerio.load(html);
     const horseData = [];
+
+    const worldTimes = {
+      Jpn: "Asia/Tokyo", // Japan (JST)
+      Sydney: "Australia/Sydney", // Sydney (AEDT)
+      EST: "America/New_York", // Eastern Standard Time (EST)
+      GB: "Europe/London", // Great Britain (GMT)
+      PST: "America/Los_Angeles", // Pacific Standard Time (PST)
+      FR: "Europe/Paris", // Chantilly, France (CET)
+      AUS: "Australia/Sydney", // Rosehill, Australia (AEDT)
+    };
 
     $(".race__day").each((index, element) => {
       const headerText = $(element).find(".header__text").text().trim();
@@ -74,15 +47,37 @@ function DolphinOwner() {
           const racecourse = $(row).find(".racecourse-name").text().trim();
           const timeLocal = $(row).find(".time").text().trim();
 
+          // Parse the local time and set the time zone
+          const localTime = moment.tz(timeLocal, "HH:mm", worldTimes.EST);
+
+          // Determine the current time
+          const currentTime = moment.tz(worldTimes.EST);
+
+          // Calculate the difference in hours between local time and midnight AEDT
+          const differenceHours = localTime.diff(
+            moment.tz("00:00", "HH:mm", worldTimes.AUS),
+            "hours"
+          );
+
+          // Check if the difference is greater than 10 hours, subtract one day
+          if (differenceHours > 10) {
+            localTime.add(1, "day");
+          }
+
+          // Convert to PST (Pacific Standard Time)
+          const pstTime = localTime.clone().tz(worldTimes.PST);
+
           horseData.push({
             raceDay: raceDate,
             horseName,
             racecourse,
-            timeLocal,
+            timeLocal: localTime.format("hh:mm A"), // Convert to AM/PM format
+            timePST: pstTime.format("hh:mm A"), // Convert to AM/PM format
           });
         });
     });
 
+    console.log(horseData);
     setHorseData(horseData);
   };
 
@@ -100,10 +95,10 @@ function DolphinOwner() {
           .filter((horse) => horse.raceDay === date)
           .map((horse, index) => (
             <tr key={index}>
-              <td className="name">{horse.horseName}</td>
               <td>{horse.racecourse}</td>
+              <td className="name">{horse.horseName}</td>
               <td>{horse.timeLocal}</td>
-              <td>{getTimeUntilRace(horse.timeLocal, horse.racecourseLocation)}</td>
+              <td>{horse.timePST}</td>
               <td>
                 <button className="button-alert">ALERT</button>
                 <button className="button-alert-all">ALERT ALL</button>
@@ -117,82 +112,35 @@ function DolphinOwner() {
     );
   };
 
-  const getTimeUntilRace = (localTime, racecourseLocation) => {
-    const raceTimeDate = new Date(`2023-10-06T${localTime}:00`);
-
-    // Determine the time zone offset of the racecourse location
-    const racecourseTimeZone = getRacecourseTimeZone(racecourseLocation);
-
-    // Convert the race time to PST
-    const pstTimeDate = new Date(
-      raceTimeDate.toLocaleString("en-US", { timeZone: "America/Los_Angeles" })
-    );
-
-    // Calculate the time difference
-    const timeUntilRace = pstTimeDate - new Date();
-
-       // Calculate the hours and minutes until the race
-    const hoursUntilRace = Math.floor(timeUntilRace / (60 * 60 * 1000));
-    const minutesUntilRace = Math.floor(
-      (timeUntilRace % (60 * 60 * 1000)) / (60 * 1000)
-    );
-
-    return `${hoursUntilRace} hours ${minutesUntilRace} minutes`;
-  };
-
-  const getRacecourseTimeZone = (racecourseLocation) => {
-    // Implement logic to map racecourse locations to their respective time zones
-    // For example:
-    // if (racecourseLocation === "Chantilly") {
-    //   return "Europe/Paris";
-    // } else if (racecourseLocation === "Kensington") {
-    //   return "Australia/Sydney";
-    // }
-    // Add more mappings as needed
-
-    // Return a default time zone if the location is not found
-    return "UTC";
-  };
-
-  const formatTime = (timeStr) => {
-    const options = {
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-      hour12: false,
-      timeZoneName: "short",
-    };
-    return new Date(timeStr).toLocaleString(undefined, options);
-  };
-
   return (
-    <div className="container">
-      <div className="scrollable-content">
-        <div className="dolphin-content"></div>
-        {parse(data)}
-      </div>
-
-      <div className="time-content">
-        <div className="time-container">
-          {/* <header className="track">{headerDate}</header> */}
+    <div>
+      <div className="container">
+        <div className="scrollable-content">
+          <div className="dolphin-content"></div>
+          {parse(data)}
         </div>
-        <table>
-          <thead>
-            <tr>
-              <th className="horse">Horse</th>
-              <th>Racecourse</th>
-              <th>Local Time</th>
-              <th>Time Until Race</th>
-              <th>Alert</th>
-              <th>Save Horse</th>
-            </tr>
-          </thead>
-          {uniqueDates.map((date) => renderHorsesForDate(date))}
-        </table>
+
+        <div className="time-content">
+          <div className="time-container">
+            {/* Render the Time component for different locations */}
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Racecourse</th>
+                <th className="horse">Horse</th>
+                <th>Local Time</th>
+                <th>PST</th>
+                <th>Alert</th>
+                <th>Save Horse</th>
+              </tr>
+            </thead>
+            {uniqueDates.map((date) => renderHorsesForDate(date))}
+          </table>
+        </div>
       </div>
     </div>
   );
 }
 
 export default DolphinOwner;
-

@@ -1,0 +1,7 @@
+.div-world-times {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  /* Create 5 equal-width columns */
+  grid-gap: 10px;
+  /* Adjust the gap between items as needed */
+}
