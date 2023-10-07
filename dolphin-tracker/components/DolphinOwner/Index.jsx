@@ -51,17 +51,19 @@ function DolphinOwner() {
           const localTime = moment.tz(timeLocal, "HH:mm", worldTimes.EST);
 
           // Determine the current time
-          const currentTime = moment.tz(worldTimes.EST);
+          // const currentTime = moment.tz(worldTimes.EST);
 
+          // Calculate the difference in hours between local time and midnight AEDT
+          // Calculate the difference in hours between local time and midnight AEDT
           // Calculate the difference in hours between local time and midnight AEDT
           const differenceHours = localTime.diff(
             moment.tz("00:00", "HH:mm", worldTimes.AUS),
             "hours"
           );
 
-          // Check if the difference is greater than 10 hours, subtract one day
-          if (differenceHours > 10) {
-            localTime.add(1, "day");
+          // Check if the difference is greater than or equal to 10 hours, subtract one day
+          if (differenceHours >= 12) {
+            localTime.subtract(1, "day");
           }
 
           // Convert to PST (Pacific Standard Time)

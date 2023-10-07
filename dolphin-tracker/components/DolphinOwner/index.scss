@@ -93,7 +93,22 @@ table tr th {
   font-size: 15px;
   font-weight: 400;
 }
+/* Style table rows */
+tr {
+  background-color: #fff;
+}
 
+/* Style every other table row */
+tr:nth-child(even) {
+  background-color: #ffffff;
+  /* Change this color as needed */
+}
+
+/* Style every other table row (odd rows) with a different background color */
+tr:nth-child(odd) {
+  background-color: #e5e5e5;
+  /* Change this color as needed */
+}
 body {
   overflow-y: auto;
   color: #333;
@@ -109,11 +124,14 @@ body {
 }
 
 .horse {
+  
+
   padding: 22px;
   
   /* Adjust the value as needed */
 }
 
 .name {
+  color: #0037b2;
   padding: 30px;
 }

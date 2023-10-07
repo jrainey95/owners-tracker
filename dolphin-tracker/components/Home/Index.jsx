@@ -16,7 +16,7 @@ const Home = () => {
       // Navigate to the "/owners/godolphin" route using navigate
       navigate("/owners/godolphin");
       // Display an alert
-      alert('You selected "Godolphin" and navigated to /owners/godolphin.');
+      // alert('You selected "Godolphin" and navigated to /owners/godolphin.');
     } else {
       alert('Please select "Godolphin" from the dropdown.');
     }
