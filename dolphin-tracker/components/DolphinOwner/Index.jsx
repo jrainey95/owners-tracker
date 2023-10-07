@@ -53,16 +53,16 @@ function DolphinOwner() {
     return (
       <tbody key={date}>
         <tr>
-          <th colSpan="6">{date}</th>
+          <th colSpan="6" className="th-colspan">
+            {date}
+          </th>
         </tr>
-        {horseData
-          .filter((horse) => horse.raceDay === date)
-          .map((horse, index) => (
+        {horseData.map((horse, index) => (
             <tr key={index}>
-              <td className="horse">{horse.horseName}</td>
+              <td className="name">{horse.horseName}</td>
               <td>{horse.racecourse}</td>
               <td>{horse.timeLocal}</td>
-              <td>{getTimeUntilRace(horse.timeLocal)}</td>
+              <td>{getTimeUntilRace(horse.timeLocal, horse.racecoursLocation)}</td>
               <td>
                 <button className="button-alert">ALERT</button>
                 <button className="button-alert-all">ALERT ALL</button>
@@ -94,9 +94,7 @@ function DolphinOwner() {
         </div>
         <table>
           <thead>
-           
             <tr>
-             
               <th className="horse">Horse</th>
               <th>Racecourse</th>
               <th>Local Time</th>
@@ -105,9 +103,6 @@ function DolphinOwner() {
               <th>Save Horse</th>
             </tr>
           </thead>
-        <tbody>
-          <th className="dates"></th>
-        </tbody>
           {uniqueDates.map((date) => renderHorsesForDate(date))}
         </table>
       </div>

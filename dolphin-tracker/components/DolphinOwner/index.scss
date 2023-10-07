@@ -18,6 +18,13 @@
   /* Add any other styles for the time-content here */
 }
 
+table 
+{width: 100%;
+  border-collapse: collapse;
+      text-indent: initial;
+        border-spacing: 2px;
+}
+
 /* Add styles for the time-container and table as needed */
 /* Adjust the race times container */
 .race-times-container {
@@ -32,6 +39,7 @@
 
 /* Style the first cell in each row */
 tr td:first-child {
+ 
   background-color: #d9f3fd;
 }
 
@@ -48,6 +56,8 @@ tr td:first-child {
 
 /* Style the table container with horizontal scrolling */
 .table-container {
+max-height: 10000px;
+  /* Adjust the value to match the max-height of scrollable-content */
   border: 1px solid #ccc;
   padding: 20px;
   margin: 20px;
@@ -55,10 +65,7 @@ tr td:first-child {
 }
 
 /* Style the table */
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
+
 
 /* Style the table header */
 thead {
@@ -92,6 +99,21 @@ body {
   color: #333;
 }
 
-.dates {
-  color: #333;
+.th-colspan {
+  color: #0037b2;
+  background-color:#ffffff;
+  padding: 13px 8px;
+  font-size: 20px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600;
+}
+
+.horse {
+  padding: 22px;
+  
+  /* Adjust the value as needed */
+}
+
+.name {
+  padding: 30px;
 }
