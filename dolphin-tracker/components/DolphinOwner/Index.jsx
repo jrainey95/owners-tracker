@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import parse from "html-react-parser";
 import cheerio from "cheerio";
-import moment from "moment-timezone"; // Import Moment.js for timezone conversion
+import moment from "moment-timezone";
 import Time from "../Time/Index";
 import "./index.scss";
 
@@ -26,16 +26,29 @@ function DolphinOwner() {
     const $ = cheerio.load(html);
     const horseData = [];
 
-    const worldTimes = {
-      Jpn: "Asia/Tokyo", // Japan (JST)
-      SydneyAEDT: "Australia/Sydney", // Sydney (AEDT)
-      SydneyAEST: "Australia/Brisbane", // Sydney (AEST)
-      EST: "America/New_York", // Eastern Standard Time (EST)
-      GB: "Europe/London", // Great Britain (GMT)
-      PST: "America/Los_Angeles", // Pacific Standard Time (PST)
-      FR: "Europe/Paris", // Chantilly, France (CET)
-      USA: "America/New_York",
-    };
+  const racecourseOffsets = {
+    "Belmont At The Big A                (USA)": -5, // GMT-5
+    "Hawkesbury                (AUS)": 11, // GMT+11
+    "Keeneland                (USA)": -5, // GMT-5
+    "Kyoto                (JPN)": 9, // GMT+9
+    "Tokyo                (JPN)": 9, // GMT+9
+    "Woodbine                (CAN)": -5, // GMT-5
+    "Indiana Grand                (USA)": -5, // GMT-5
+    "Leicester                (GB)": 1, // GMT+1
+    "Southwell (AW)                (GB)": 1, // GMT+1
+    "Nottingham                (GB)": 1, // GMT+1
+    "York                (GB)": 1, // GMT+1
+    "Delaware Park                (USA)": -5, // GMT-5
+    "Kempton (AW)                (GB)": 1, // GMT+1
+    "Wolverhampton (AW)                (GB)": 1, // GMT+1
+    "Lyon Parilly                (FR)": 1, // GMT+1
+    "Newmarket                (GB)": 1, // GMT+1
+    "Newcastle (AW)                (GB)": 1, // GMT+1 with
+    // Add more racecourses and their offsets as needed
+  };
+
+
+
 
     $(".race__day").each((index, element) => {
       const headerText = $(element).find(".header__text").text().trim();
@@ -48,34 +61,29 @@ function DolphinOwner() {
           const racecourse = $(row).find(".racecourse-name").text().trim();
           const timeLocal = $(row).find(".time").text().trim();
 
-          // Parse the local time and set the time zone
-          const localTime = moment.tz(timeLocal, "HH:mm", worldTimes.EST);
+          let timeZoneOffset = racecourseOffsets[racecourse] || 0;
 
-          // Determine the current time zone based on location
-          let timeZone = worldTimes.EST;
-          if (racecourse === "AUS") {
-            timeZone =
-              localTime.isDST() && localTime.isDST() === true
-                ? worldTimes.SydneyAEDT
-                : worldTimes.SydneyAEST;
-          } else if (racecourse === "Jpn") {
-            timeZone = worldTimes.Jpn;
-          } else if (racecourse === "USA") {
-            timeZone = worldTimes.USA;
-          }
+          const localTime = moment.tz(
+            timeLocal,
+            "HH:mm",
+            `Etc/GMT${timeZoneOffset < 10 ? "-" : "+"}${Math.abs(
+              timeZoneOffset
+            )}`
+          );
 
-          // Calculate the JST time (+9 from GMT) and PST time (-7 from JST)
-          const jstTime = localTime.clone().tz(timeZone).add(0, "hours");
-          const pstTime = jstTime.clone().subtract(16, "hours");
-      
+          // Inside the extractHorseData function
+          console.log("Racecourse:", racecourse); // Log the racecourse name
+          console.log("Offset:", timeZoneOffset); // Log the offset being used
+
+          const gmtTime = localTime.clone().subtract(timeZoneOffset, "hours");
 
           horseData.push({
             raceDay: raceDate,
             horseName,
             racecourse,
-            timeLocal: localTime.format("hh:mm A"), // Convert to AM/PM format
-            timeJST: jstTime.format("hh:mm A"), // Convert to AM/PM format
-            timePST: pstTime.format("hh:mm A"), // Convert to AM/PM format
+            timeLocal: localTime.format("hh:mm A"),
+            timeGMT: gmtTime.format("hh:mm A"),
+            racecourseOffset: timeZoneOffset,
           });
         });
     });
@@ -90,7 +98,7 @@ function DolphinOwner() {
     return (
       <tbody key={date}>
         <tr>
-          <th colSpan="7" className="th-colspan">
+          <th colSpan="8" className="th-colspan">
             {date}
           </th>
         </tr>
@@ -101,8 +109,10 @@ function DolphinOwner() {
               <td>{horse.racecourse}</td>
               <td className="name">{horse.horseName}</td>
               <td>{horse.timeLocal}</td>
-              <td>{horse.timeJST}</td>
-              <td>{horse.timePST}</td>
+              <td>{horse.racecourseOffset}</td>
+              <td>{horse.timeGMT}</td>
+              <td>{horse.timePST}</td>{" "}
+              {/* Add this if you need to display PST */}
               <td>
                 <button className="button-alert">ALERT</button>
                 <button className="button-alert-all">ALERT ALL</button>
@@ -134,7 +144,7 @@ function DolphinOwner() {
                 <th>Racecourse</th>
                 <th className="horse">Horse</th>
                 <th>Local Time</th>
-                <th>JST</th>
+                <th>GMT</th>
                 <th>PST</th>
                 <th>Alert</th>
                 <th>Save Horse</th>
