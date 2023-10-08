@@ -115,13 +115,29 @@ function DolphinOwner() {
       </tbody>
     );
   };
-const calculateTimeUntilPost = (timeGMT) => {
-  const raceTime = moment.tz(timeGMT, "hh:mm A", "Etc/GMT+7"); // Assuming GMT+8 for the race time
+
+
+const calculateTimeUntilPost = (timeGMT, racecourse) => {
+  const raceTime = moment.tz(timeGMT, "hh:mm A", "Etc/GMT+8"); // Assuming GMT+8 for the race time
   const currentTime = moment();
   const duration = moment.duration(raceTime.diff(currentTime));
 
   if (duration.asSeconds() <= 0) {
     return "Race Over";
+  }
+
+  if (racecourse === "AUS" || racecourse === "AUS") {
+    // Check if the race is scheduled for the following day
+    const tomorrow = moment().add(1, "days");
+    const raceTimeAUS = moment.tz(timeGMT, "hh:mm A", "Etc/GMT+11"); // Australian time zone (GMT+11)
+
+    if (
+      moment(raceTimeAUS).isAfter(
+        moment(tomorrow.format("YYYY-MM-DD") + " 00:00", "YYYY-MM-DD HH:mm")
+      )
+    ) {
+      return "Tonight";
+    }
   }
 
   const hours = Math.floor(duration.asHours());
@@ -150,7 +166,7 @@ const calculateTimeUntilPost = (timeGMT) => {
                 <th>Racecourse</th>
                 <th className="horse">Horse</th>
                 <th>Local Time</th>
-                <th>GMT</th>
+                <th>PST</th>
                 <th>Minutes Until Post</th>
                 <th>Alert</th>
                 <th>Save Horse</th>
