@@ -27,23 +27,23 @@ function DolphinOwner() {
     const horseData = [];
 
   const racecourseOffsets = {
-    "Belmont At The Big A                (USA)": -5, // GMT-5
-    "Hawkesbury                (AUS)": 11, // GMT+11
-    "Keeneland                (USA)": -5, // GMT-5
-    "Kyoto                (JPN)": 9, // GMT+9
-    "Tokyo                (JPN)": 9, // GMT+9
-    "Woodbine                (CAN)": -5, // GMT-5
-    "Indiana Grand                (USA)": -5, // GMT-5
-    "Leicester                (GB)": 1, // GMT+1
-    "Southwell (AW)                (GB)": 1, // GMT+1
-    "Nottingham                (GB)": 1, // GMT+1
-    "York                (GB)": 1, // GMT+1
-    "Delaware Park                (USA)": -5, // GMT-5
-    "Kempton (AW)                (GB)": 1, // GMT+1
-    "Wolverhampton (AW)                (GB)": 1, // GMT+1
-    "Lyon Parilly                (FR)": 1, // GMT+1
-    "Newmarket                (GB)": 1, // GMT+1
-    "Newcastle (AW)                (GB)": 1, // GMT+1 with
+    "Belmont At The Big A                (USA)": -3, // GMT-3
+    "Hawkesbury                (AUS)": 18, // GMT+11
+    "Keeneland                (USA)": -3, // GMT-3
+    "Kyoto                (JPN)": 16, // GMT+9
+    "Tokyo                (JPN)": 16, // GMT+9
+    "Woodbine                (CAN)": -3, // GMT-3
+    "Indiana Grand                (USA)": -3, // GMT-3
+    "Leicester                (GB)": 8, // GMT+8
+    "Southwell (AW)                (GB)": 8, // GMT+8
+    "Nottingham                (GB)": 8, // GMT+8
+    "York                (GB)": 8, // GMT+8
+    "Delaware Park                (USA)": -3, // GMT-3
+    "Kempton (AW)                (GB)": 8, // GMT+8
+    "Wolverhampton (AW)                (GB)": 8, // GMT+8
+    "Lyon Parilly                (FR)": 8, // GMT+8
+    "Newmarket                (GB)": 8, // GMT+8
+    "Newcastle (AW)                (GB)": 8, // GMT+8 with
     // Add more racecourses and their offsets as needed
   };
 
@@ -109,10 +109,9 @@ function DolphinOwner() {
               <td>{horse.racecourse}</td>
               <td className="name">{horse.horseName}</td>
               <td>{horse.timeLocal}</td>
-              <td>{horse.racecourseOffset}</td>
+              
               <td>{horse.timeGMT}</td>
-              <td>{horse.timePST}</td>{" "}
-              {/* Add this if you need to display PST */}
+              {/* <td>{horse.timePST}</td> */}
               <td>
                 <button className="button-alert">ALERT</button>
                 <button className="button-alert-all">ALERT ALL</button>
@@ -144,7 +143,6 @@ function DolphinOwner() {
                 <th>Racecourse</th>
                 <th className="horse">Horse</th>
                 <th>Local Time</th>
-                <th>GMT</th>
                 <th>PST</th>
                 <th>Alert</th>
                 <th>Save Horse</th>
