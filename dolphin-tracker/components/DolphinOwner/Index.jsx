@@ -118,46 +118,38 @@ function DolphinOwner() {
     );
   };
 
- const calculateTimeUntilPost = (timeGMT, racecourse) => {
-   const raceTime = moment.tz(timeGMT, "hh:mm A", "Etc/GMT+7"); // Assuming GMT+8 for the race time
-   const currentTime = moment();
-   const duration = moment.duration(raceTime.diff(currentTime));
+  const calculateTimeUntilPost = (timeGMT, racecourse) => {
+    // Get the current date in "YYYY-MM-DD" format
+    const currentDate = moment().format("YYYY-MM-DD");
 
-   if (duration.asSeconds() <= 0) {
-     return "Race Over";
-   }
+    // Create a moment object for the race time
+    const raceTime = moment.tz(timeGMT, "hh:mm A", "Etc/GMT+7"); // Assuming GMT+8 for the race time
+    const currentTime = moment();
+    const duration = moment.duration(raceTime.diff(currentTime));
+    
+if (!moment(currentDate).isSame(moment(), "day")) {
+  return "Not Race Day";
+} else if (duration.asSeconds() <= 0) {
+  return "Race Over";
+}
 
-   if (
-     racecourse === "Kyoto                (JPN)" ||
-     racecourse === "Tokyo                (JPN)" ||
-     racecourse === "Hawkesbury                (AUS)"
-   ) {
-     // Check if the race is scheduled for the following day
-     const tomorrow = moment().add(1, "day");
-     const raceTimeAUS = moment.tz(timeGMT, "YYYY-MM-DD hh:mm A", "Etc/GMT+11"); // Australian time zone (GMT+11)
-     if (moment(raceTimeAUS).isAfter(tomorrow)) {
-       const timeUntilRace = moment.duration(raceTimeAUS.diff(moment()));
-       return `Tonight at ${raceTimeAUS.format(
-         "hh:mm A"
-       )} (${timeUntilRace.days()}d ${timeUntilRace.hours()}h ${timeUntilRace.minutes()}m ${timeUntilRace.seconds()}s until race time)`;
-     }
-   }
 
-   const days = duration.days();
-   const hours = duration.hours();
-   const minutes = duration.minutes();
-   const seconds = duration.seconds();
 
-   if (days > 0) {
-     return `${days}d ${hours}h ${minutes}m ${seconds}s until race time`;
-   }
+    // Check if the race is on the current date
+    if (moment(currentDate).isSame(raceTime, "day")) {
+      const hours = duration.hours();
+      const minutes = duration.minutes();
+      const seconds = duration.seconds();
 
-   if (hours === 0 && minutes === 0 && seconds === 0) {
-     return "Race Tonight";
-   }
+      if (hours === 0 && minutes === 0 && seconds === 0) {
+        return "Race Tonight";
+      }
 
-   return `${hours}h ${minutes}m ${seconds}s until race time`;
- };
+      return `${hours}h ${minutes}m ${seconds}s until race time`;
+    } else {
+      return "Not Race Day";
+    }
+  };
 
 
   return (
