@@ -29,18 +29,18 @@ function DolphinOwner() {
     const horseData = [];
 
     const racecourseOffsets = {
-      "Belmont At The Big A                (USA)": -3, // GMT-3
+      "Belmont At The Big A                (USA)": 3, // GMT-3
       "Hawkesbury                (AUS)": 18, // GMT+11
-      "Keeneland                (USA)": -3, // GMT-3
+      "Keeneland                (USA)": 3, // GMT-3
       "Kyoto                (JPN)": 16, // GMT+9
       "Tokyo                (JPN)": 16, // GMT+9
-      "Woodbine                (CAN)": -3, // GMT-3
-      "Indiana Grand                (USA)": -3, // GMT-3
+      "Woodbine                (CAN)": 3, // GMT-3
+      "Indiana Grand                (USA)": 3, // GMT-3
       "Leicester                (GB)": 8, // GMT+8
       "Southwell (AW)                (GB)": 8, // GMT+8
       "Nottingham                (GB)": 8, // GMT+8
       "York                (GB)": 8, // GMT+8
-      "Delaware Park                (USA)": -3, // GMT-3
+      "Delaware Park                (USA)": 3, // GMT-3
       "Kempton (AW)                (GB)": 8, // GMT+8
       "Wolverhampton (AW)                (GB)": 8, // GMT+8
       "Lyon Parilly                (FR)": 8, // GMT+8
@@ -118,45 +118,46 @@ function DolphinOwner() {
     );
   };
 
-  const calculateTimeUntilPost = (timeGMT, racecourse) => {
-    const raceTime = moment.tz(timeGMT, "hh:mm A", "Etc/GMT+7"); // Assuming GMT+8 for the race time
-    const currentTime = moment();
-    const duration = moment.duration(raceTime.diff(currentTime));
+ const calculateTimeUntilPost = (timeGMT, racecourse) => {
+   const raceTime = moment.tz(timeGMT, "hh:mm A", "Etc/GMT+7"); // Assuming GMT+8 for the race time
+   const currentTime = moment();
+   const duration = moment.duration(raceTime.diff(currentTime));
 
-    if (duration.asSeconds() <= 0) {
-      return "Race Over";
-    }
+   if (duration.asSeconds() <= 0) {
+     return "Race Over";
+   }
 
-    if (
-      racecourse === "Kyoto                (JPN)" ||
-      racecourse === "Tokyo                (JPN)" ||
-      racecourse === "Hawkesbury                (AUS)"
-    ) {
-      // Check if the race is scheduled for the following day
-      const tomorrow = moment().add(1, "day");
-      const raceTimeAUS = moment.tz(
-        timeGMT,
-        "YYYY-MM-DD hh:mm A",
-        "Etc/GMT+11"
-      ); // Australian time zone (GMT+11)
-       if (moment(raceTimeAUS).isAfter(tomorrow)) {
-            const timeUntilRace = moment.duration(raceTimeAUS.diff(moment()));
-            return `Tonight at ${raceTimeAUS.format(
-                "hh:mm A"
-            )} (${timeUntilRace.hours()}h ${timeUntilRace.minutes()}m ${timeUntilRace.seconds()}s until race time)`;
-        }
-    }
+   if (
+     racecourse === "Kyoto                (JPN)" ||
+     racecourse === "Tokyo                (JPN)" ||
+     racecourse === "Hawkesbury                (AUS)"
+   ) {
+     // Check if the race is scheduled for the following day
+     const tomorrow = moment().add(1, "day");
+     const raceTimeAUS = moment.tz(timeGMT, "YYYY-MM-DD hh:mm A", "Etc/GMT+11"); // Australian time zone (GMT+11)
+     if (moment(raceTimeAUS).isAfter(tomorrow)) {
+       const timeUntilRace = moment.duration(raceTimeAUS.diff(moment()));
+       return `Tonight at ${raceTimeAUS.format(
+         "hh:mm A"
+       )} (${timeUntilRace.days()}d ${timeUntilRace.hours()}h ${timeUntilRace.minutes()}m ${timeUntilRace.seconds()}s until race time)`;
+     }
+   }
 
-    const hours = Math.floor(duration.asHours());
-    const minutes = duration.minutes();
-    const seconds = duration.seconds();
+   const days = duration.days();
+   const hours = duration.hours();
+   const minutes = duration.minutes();
+   const seconds = duration.seconds();
 
-    if (hours === 0 && minutes === 0 && seconds === 0) {
-      return "Race Tonight";
-    }
-    console.log(currentTime);
-    return `${hours}h ${minutes}m ${seconds}s until race time`;
-  };
+   if (days > 0) {
+     return `${days}d ${hours}h ${minutes}m ${seconds}s until race time`;
+   }
+
+   if (hours === 0 && minutes === 0 && seconds === 0) {
+     return "Race Tonight";
+   }
+
+   return `${hours}h ${minutes}m ${seconds}s until race time`;
+ };
 
 
   return (
