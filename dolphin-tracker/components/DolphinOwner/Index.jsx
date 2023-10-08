@@ -26,29 +26,26 @@ function DolphinOwner() {
     const $ = cheerio.load(html);
     const horseData = [];
 
-  const racecourseOffsets = {
-    "Belmont At The Big A                (USA)": -3, // GMT-3
-    "Hawkesbury                (AUS)": 18, // GMT+11
-    "Keeneland                (USA)": -3, // GMT-3
-    "Kyoto                (JPN)": 16, // GMT+9
-    "Tokyo                (JPN)": 16, // GMT+9
-    "Woodbine                (CAN)": -3, // GMT-3
-    "Indiana Grand                (USA)": -3, // GMT-3
-    "Leicester                (GB)": 8, // GMT+8
-    "Southwell (AW)                (GB)": 8, // GMT+8
-    "Nottingham                (GB)": 8, // GMT+8
-    "York                (GB)": 8, // GMT+8
-    "Delaware Park                (USA)": -3, // GMT-3
-    "Kempton (AW)                (GB)": 8, // GMT+8
-    "Wolverhampton (AW)                (GB)": 8, // GMT+8
-    "Lyon Parilly                (FR)": 8, // GMT+8
-    "Newmarket                (GB)": 8, // GMT+8
-    "Newcastle (AW)                (GB)": 8, // GMT+8 with
-    // Add more racecourses and their offsets as needed
-  };
-
-
-
+    const racecourseOffsets = {
+      "Belmont At The Big A                (USA)": -3, // GMT-3
+      "Hawkesbury                (AUS)": 18, // GMT+11
+      "Keeneland                (USA)": -3, // GMT-3
+      "Kyoto                (JPN)": 16, // GMT+9
+      "Tokyo                (JPN)": 16, // GMT+9
+      "Woodbine                (CAN)": -3, // GMT-3
+      "Indiana Grand                (USA)": -3, // GMT-3
+      "Leicester                (GB)": 8, // GMT+8
+      "Southwell (AW)                (GB)": 8, // GMT+8
+      "Nottingham                (GB)": 8, // GMT+8
+      "York                (GB)": 8, // GMT+8
+      "Delaware Park                (USA)": -3, // GMT-3
+      "Kempton (AW)                (GB)": 8, // GMT+8
+      "Wolverhampton (AW)                (GB)": 8, // GMT+8
+      "Lyon Parilly                (FR)": 8, // GMT+8
+      "Newmarket                (GB)": 8, // GMT+8
+      "Newcastle (AW)                (GB)": 8, // GMT+8 with
+      // Add more racecourses and their offsets as needed
+    };
 
     $(".race__day").each((index, element) => {
       const headerText = $(element).find(".header__text").text().trim();
@@ -71,10 +68,6 @@ function DolphinOwner() {
             )}`
           );
 
-          // Inside the extractHorseData function
-          console.log("Racecourse:", racecourse); // Log the racecourse name
-          console.log("Offset:", timeZoneOffset); // Log the offset being used
-
           const gmtTime = localTime.clone().subtract(timeZoneOffset, "hours");
 
           horseData.push({
@@ -83,7 +76,6 @@ function DolphinOwner() {
             racecourse,
             timeLocal: localTime.format("hh:mm A"),
             timeGMT: gmtTime.format("hh:mm A"),
-            racecourseOffset: timeZoneOffset,
           });
         });
     });
@@ -109,9 +101,8 @@ function DolphinOwner() {
               <td>{horse.racecourse}</td>
               <td className="name">{horse.horseName}</td>
               <td>{horse.timeLocal}</td>
-              
               <td>{horse.timeGMT}</td>
-              {/* <td>{horse.timePST}</td> */}
+              <td>{calculateTimeUntilPost(horse.timeGMT)}</td>
               <td>
                 <button className="button-alert">ALERT</button>
                 <button className="button-alert-all">ALERT ALL</button>
@@ -124,6 +115,22 @@ function DolphinOwner() {
       </tbody>
     );
   };
+const calculateTimeUntilPost = (timeGMT) => {
+  const raceTime = moment.tz(timeGMT, "hh:mm A", "Etc/GMT+7"); // Assuming GMT+8 for the race time
+  const currentTime = moment();
+  const duration = moment.duration(raceTime.diff(currentTime));
+
+  if (duration.asSeconds() <= 0) {
+    return "Race Over";
+  }
+
+  const hours = Math.floor(duration.asHours());
+  const minutes = duration.minutes();
+  const seconds = duration.seconds();
+
+  return `${hours}h ${minutes}m ${seconds}s`;
+};
+
 
   return (
     <div>
@@ -143,7 +150,8 @@ function DolphinOwner() {
                 <th>Racecourse</th>
                 <th className="horse">Horse</th>
                 <th>Local Time</th>
-                <th>PST</th>
+                <th>GMT</th>
+                <th>Minutes Until Post</th>
                 <th>Alert</th>
                 <th>Save Horse</th>
               </tr>
