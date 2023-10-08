@@ -4,6 +4,8 @@ import cheerio from "cheerio";
 import moment from "moment-timezone";
 import Time from "../Time/Index";
 import "./index.scss";
+// const moment = require("moment-timezone");
+// require("moment-timezone/builds/moment-timezone-with-data-2022-02"); // Replace with your custom data file
 
 function DolphinOwner() {
   const [data, setData] = useState("");
@@ -43,7 +45,7 @@ function DolphinOwner() {
       "Wolverhampton (AW)                (GB)": 8, // GMT+8
       "Lyon Parilly                (FR)": 8, // GMT+8
       "Newmarket                (GB)": 8, // GMT+8
-      "Newcastle (AW)                (GB)": 8, // GMT+8 with
+      "Newcastle (AW)                (GB)": 8, // GMT+8
       // Add more racecourses and their offsets as needed
     };
 
@@ -60,14 +62,14 @@ function DolphinOwner() {
 
           let timeZoneOffset = racecourseOffsets[racecourse] || 0;
 
-          const localTime = moment.tz(
-            timeLocal,
-            "HH:mm",
-            `Etc/GMT${timeZoneOffset < 10 ? "-" : "+"}${Math.abs(
-              timeZoneOffset
-            )}`
-          );
+          const timeZoneIdentifier =
+            timeZoneOffset !== 0
+              ? `Etc/GMT${timeZoneOffset < 10 ? "-" : "+"}${Math.abs(
+                  timeZoneOffset
+                )}`
+              : "UTC";
 
+          const localTime = moment.tz(timeLocal, "HH:mm", timeZoneIdentifier);
           const gmtTime = localTime.clone().subtract(timeZoneOffset, "hours");
 
           horseData.push({
@@ -102,7 +104,7 @@ function DolphinOwner() {
               <td className="name">{horse.horseName}</td>
               <td>{horse.timeLocal}</td>
               <td>{horse.timeGMT}</td>
-              <td>{calculateTimeUntilPost(horse.timeGMT)}</td>
+              <td>{calculateTimeUntilPost(horse.timeGMT, horse.racecourse)}</td>
               <td>
                 <button className="button-alert">ALERT</button>
                 <button className="button-alert-all">ALERT ALL</button>
@@ -116,36 +118,44 @@ function DolphinOwner() {
     );
   };
 
+  const calculateTimeUntilPost = (timeGMT, racecourse) => {
+    const raceTime = moment.tz(timeGMT, "hh:mm A", "Etc/GMT+7"); // Assuming GMT+8 for the race time
+    const currentTime = moment();
+    const duration = moment.duration(raceTime.diff(currentTime));
 
-const calculateTimeUntilPost = (timeGMT, racecourse) => {
-  const raceTime = moment.tz(timeGMT, "hh:mm A", "Etc/GMT+8"); // Assuming GMT+8 for the race time
-  const currentTime = moment();
-  const duration = moment.duration(raceTime.diff(currentTime));
-
-  if (duration.asSeconds() <= 0) {
-    return "Race Over";
-  }
-
-  if (racecourse === "AUS" || racecourse === "AUS") {
-    // Check if the race is scheduled for the following day
-    const tomorrow = moment().add(1, "days");
-    const raceTimeAUS = moment.tz(timeGMT, "hh:mm A", "Etc/GMT+11"); // Australian time zone (GMT+11)
+    if (duration.asSeconds() <= 0) {
+      return "Race Over";
+    }
 
     if (
-      moment(raceTimeAUS).isAfter(
-        moment(tomorrow.format("YYYY-MM-DD") + " 00:00", "YYYY-MM-DD HH:mm")
-      )
+      racecourse === "Tokyo                (JPN)" ||
+      racecourse === "Hawkesbury                (AUS)"
     ) {
-      return "Tonight";
+      // Check if the race is scheduled for the following day
+      const tomorrow = moment().add(0, "day");
+      const raceTimeAUS = moment.tz(timeGMT, "hh:mm A", "Etc/GMT+7"); // Australian time zone (GMT+11)
+      if (
+        moment(raceTimeAUS).isAfter(
+          moment(tomorrow.format("YYYY-MM-DD") + " 00:00", "YYYY-MM-DD HH:mm")
+        )
+      ) {
+        const timeUntilRace = moment.duration(raceTimeAUS.diff(moment()));
+        return `Tonight at ${raceTimeAUS.format(
+          "hh:mm A"
+        )} (${timeUntilRace.hours()}h ${timeUntilRace.minutes()}m ${timeUntilRace.seconds()}s until race time)`;
+      }
     }
-  }
 
-  const hours = Math.floor(duration.asHours());
-  const minutes = duration.minutes();
-  const seconds = duration.seconds();
+    const hours = Math.floor(duration.asHours());
+    const minutes = duration.minutes();
+    const seconds = duration.seconds();
 
-  return `${hours}h ${minutes}m ${seconds}s`;
-};
+    if (hours === 0 && minutes === 0 && seconds === 0) {
+      return "Race Tonight";
+    }
+    console.log(currentTime);
+    return `${hours}h ${minutes}m ${seconds}s until race time`;
+  };
 
 
   return (
