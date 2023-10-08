@@ -128,22 +128,23 @@ function DolphinOwner() {
     }
 
     if (
+      racecourse === "Kyoto                (JPN)" ||
       racecourse === "Tokyo                (JPN)" ||
       racecourse === "Hawkesbury                (AUS)"
     ) {
       // Check if the race is scheduled for the following day
-      const tomorrow = moment().add(0, "day");
-      const raceTimeAUS = moment.tz(timeGMT, "hh:mm A", "Etc/GMT+7"); // Australian time zone (GMT+11)
-      if (
-        moment(raceTimeAUS).isAfter(
-          moment(tomorrow.format("YYYY-MM-DD") + " 00:00", "YYYY-MM-DD HH:mm")
-        )
-      ) {
-        const timeUntilRace = moment.duration(raceTimeAUS.diff(moment()));
-        return `Tonight at ${raceTimeAUS.format(
-          "hh:mm A"
-        )} (${timeUntilRace.hours()}h ${timeUntilRace.minutes()}m ${timeUntilRace.seconds()}s until race time)`;
-      }
+      const tomorrow = moment().add(1, "day");
+      const raceTimeAUS = moment.tz(
+        timeGMT,
+        "YYYY-MM-DD hh:mm A",
+        "Etc/GMT+11"
+      ); // Australian time zone (GMT+11)
+       if (moment(raceTimeAUS).isAfter(tomorrow)) {
+            const timeUntilRace = moment.duration(raceTimeAUS.diff(moment()));
+            return `Tonight at ${raceTimeAUS.format(
+                "hh:mm A"
+            )} (${timeUntilRace.hours()}h ${timeUntilRace.minutes()}m ${timeUntilRace.seconds()}s until race time)`;
+        }
     }
 
     const hours = Math.floor(duration.asHours());
