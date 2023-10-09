@@ -118,104 +118,131 @@ function DolphinOwner() {
     );
   };
 
-  
-// const calculateTimeUntilPost = (timeGMT, racecourse) => {
-//   const raceTime = moment.tz(timeGMT, "hh:mm A", "Etc/GMT+7"); // Assuming GMT+8 for the race time
-//   const currentTime = moment();
-//   const duration = moment.duration(raceTime.diff(currentTime));
+  // const calculateTimeUntilPost = (timeGMT, racecourse) => {
+  //   const raceTime = moment.tz(timeGMT, "hh:mm A", "Etc/GMT+7"); // Assuming GMT+8 for the race time
+  //   const currentTime = moment();
+  //   const duration = moment.duration(raceTime.diff(currentTime));
 
-//   if (duration.asSeconds() <= 0) {
-//     return "Race Over";
-//   }
+  //   if (duration.asSeconds() <= 0) {
+  //     return "Race Over";
+  //   }
 
-//   if (
-//     racecourse === "Kyoto                (JPN)" ||
-//     racecourse === "Tokyo                (JPN)" ||
-//     racecourse === "Hawkesbury                (AUS)"
-//   ) {
-//     // Check if the race is scheduled for the following day
-//     const tomorrow = moment().add(1, "day");
-//     const raceTimeAUS = moment.tz(timeGMT, "hh:mm A", "Etc/GMT+7"); // Australian time zone (GMT+11)
-//     if (
-//       moment(raceTimeAUS).isAfter(
-//         moment(tomorrow.format("YYYY-MM-DD") + " 00:00", "YYYY-MM-DD HH:mm")
-//       )
-//     ) {
-//       const timeUntilRace = moment.duration(raceTimeAUS.diff(moment()));
-//       return `Tonight at ${raceTimeAUS.format(
-//         "hh:mm A"
-//       )} (${timeUntilRace.hours()}h ${timeUntilRace.minutes()}m ${timeUntilRace.seconds()}s until race time)`;
-//     }
-//   }
+  //   if (
+  //     racecourse === "Kyoto                (JPN)" ||
+  //     racecourse === "Tokyo                (JPN)" ||
+  //     racecourse === "Hawkesbury                (AUS)"
+  //   ) {
+  //     // Check if the race is scheduled for the following day
+  //     const tomorrow = moment().add(1, "day");
+  //     const raceTimeAUS = moment.tz(timeGMT, "hh:mm A", "Etc/GMT+7"); // Australian time zone (GMT+11)
+  //     if (
+  //       moment(raceTimeAUS).isAfter(
+  //         moment(tomorrow.format("YYYY-MM-DD") + " 00:00", "YYYY-MM-DD HH:mm")
+  //       )
+  //     ) {
+  //       const timeUntilRace = moment.duration(raceTimeAUS.diff(moment()));
+  //       return `Tonight at ${raceTimeAUS.format(
+  //         "hh:mm A"
+  //       )} (${timeUntilRace.hours()}h ${timeUntilRace.minutes()}m ${timeUntilRace.seconds()}s until race time)`;
+  //     }
+  //   }
 
-//   const hours = Math.floor(duration.asHours());
-//   const minutes = duration.minutes();
-//   const seconds = duration.seconds();
+  //   const hours = Math.floor(duration.asHours());
+  //   const minutes = duration.minutes();
+  //   const seconds = duration.seconds();
 
-//   if (hours === 0 && minutes === 0 && seconds === 0) {
-//     return "Race Tonight";
-//   }
-//   console.log(currentTime);
-//   return `${hours}h ${minutes}m ${seconds}s until race time`;
-// }; 
+  //   if (hours === 0 && minutes === 0 && seconds === 0) {
+  //     return "Race Tonight";
+  //   }
+  //   console.log(currentTime);
+  //   return `${hours}h ${minutes}m ${seconds}s until race time`;
+  // };
 
+  const calculateTimeUntilPost = (timeGMT, racecourse) => {
+    const raceTime = moment.tz(timeGMT, "hh:mm A", "Etc/GMT+7"); // Assuming GMT+8 for the race time
+    const currentTime = moment();
+    const duration = moment.duration(raceTime.diff(currentTime));
+    const currentDate = moment().format("DD-MM-YYYY");
+    console.log(currentDate);
 
-
-
-
-const calculateTimeUntilPost = (timeGMT, racecourse) => {
-  const raceTime = moment.tz(timeGMT, "hh:mm A", "Etc/GMT+7"); // Assuming GMT+8 for the race time
-  const currentTime = moment();
-  const duration = moment.duration(raceTime.diff(currentTime));
-
-  if (duration.asSeconds() <= 0) {
-    return "Race Over";
-  }
-
-  if (
-    racecourse === "Kyoto                (JPN)" ||
-    racecourse === "Tokyo                (JPN)" ||
-    racecourse === "Hawkesbury                (AUS)"
-  ) {
-    // Check if the race is scheduled for the following day
-    const tomorrow = moment().add(1, "day");
-    const raceTimeAUS = moment.tz(timeGMT, "hh:mm A", "Etc/GMT+7"); // Australian time zone (GMT+11)
-    if (
-      moment(raceTimeAUS).isAfter(
-        moment(tomorrow.format("YYYY-MM-DD") + " 00:00", "YYYY-MM-DD HH:mm")
-      )
-    ) {
-      const timeUntilRace = moment.duration(raceTimeAUS.diff(moment()));
-      return `Tonight at ${raceTimeAUS.format(
-        "hh:mm A"
-      )} (${timeUntilRace.hours()}h ${timeUntilRace.minutes()}m ${timeUntilRace.seconds()}s until race time)`;
+    if (duration.asSeconds() <= 0) {
+      return "Race Over";
     }
-  }
 
-  const hours = Math.floor(duration.asHours());
-  const minutes = duration.minutes();
-  const seconds = duration.seconds();
+    //   if (currentDate !== currentTime) {
+    //     return "Not Race Day";
+    //     // console.log(currentDate);
+    //   } else if (duration.asSeconds() <= 0) {
+    //     return "Race Over";
+    //   }
 
-  if (hours === 0 && minutes === 0 && seconds === 0) {
-    return "Race Tonight";
-  }
-  console.log(currentTime);
-  return `${hours}h ${minutes}m ${seconds}s until race time`;
-}; 
+    if (
+      racecourse === "Kyoto                (JPN)" ||
+      racecourse === "Tokyo                (JPN)" ||
+      racecourse === "Hawkesbury                (AUS)"
+    ) {
+      // Check if the race is scheduled for the following day
+      const tomorrow = moment().add(1, "day");
+      const raceTimeAUS = moment.tz(timeGMT, "hh:mm A", "Etc/GMT+7"); // Australian time zone (GMT+11)
+      if (
+        moment(raceTimeAUS).isAfter(
+          moment(tomorrow.format("YYYY-MM-DD") + " 00:00", "YYYY-MM-DD HH:mm")
+        )
 
+        //   if (currentDate !== currentTime) {
+        //     return "Not Race Day";
+        //     // console.log(currentDate);
+        //   } else if (duration.asSeconds() <= 0) {
+        //     return "Race Over";
+        //   }
+      ) {
+        const timeUntilRace = moment.duration(raceTimeAUS.diff(moment()));
+        return `Tonight at ${raceTimeAUS.format(
+          "hh:mm A"
+        )} (${timeUntilRace.hours()}h ${timeUntilRace.minutes()}m ${timeUntilRace.seconds()}s until race time)`;
+      }
+    }
 
+    const hours = Math.floor(duration.asHours());
+    const minutes = duration.minutes();
+    const seconds = duration.seconds();
 
+    if (hours === 0 && minutes === 0 && seconds === 0) {
+      return "Race Tonight";
+    }
+    console.log(currentTime);
+    return `${hours}h ${minutes}m ${seconds}s until race time`;
+  };
 
+  // const calculateTimeUntilPost = (timeGMT, raceDate) => {
+  //   // Get the current date in "YYYY-MM-DD" format
+  //   const currentDate = moment().format("DD-MM-YYYY");
+  //   console.log("Current Date:", currentDate);
 
+  //   // Create a moment object for the race time
+  //   const raceTime = moment.tz(timeGMT, "DD-MM-YYYY", "hh:mm A", "Etc/GMT+7"); // Assuming GMT+8 for the race time
+  //   const currentTime = moment();
+  //   console.log(currentTime);
+  //   const duration = moment.duration(raceTime.diff(currentTime));
 
+  //   if (currentDate !== currentTime) {
+  //     return "Not Race Day";
+  //     // console.log(currentDate);
+  //   } else if (duration.asSeconds() <= 0) {
+  //     return "Race Over";
+  //   }
 
+  //   // Check if the race is on the current date
+  //   if (moment(currentDate).isSame(raceTime, "day")) {
+  //     const hours = duration.hours();
+  //     const minutes = duration.minutes();
+  //     const seconds = duration.seconds();
 
-
-
-
-
-
-
+  //     return `${hours}h ${minutes}m ${seconds}s until race time`;
+  //   } else {
+  //     return "Not Race Day";
+  //   }
+  // };
 
   return (
     <div>
