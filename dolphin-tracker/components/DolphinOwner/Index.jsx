@@ -8,20 +8,31 @@ import "./index.scss";
 function DolphinOwner() {
   const [data, setData] = useState("");
   const [horseData, setHorseData] = useState([]);
-  const [headerDate, setHeaderDate] = useState("");
-  const currentJapanDate = moment().tz("Asia/Tokyo").format("DD-MM-YYYY"); // Current date in Japan timezone
+  const [countdown, setCountdown] = useState(60);
+  const [isLoading, setIsLoading] = useState(true);
+  const currentJapanDate = moment().tz("Asia/Tokyo").format("DD-MM-YYYY");
+
   useEffect(() => {
-    fetch("http://localhost:3001/api/fetchData")
-      .then((response) => response.text())
-      .then((html) => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/fetchData");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const html = await response.text();
         setData(html);
         extractHorseData(html);
-      })
-      .catch((error) => {
+        setIsLoading(false);
+        // Start the countdown timer when data is fetched
+        startCountdown();
+      } catch (error) {
         console.error("Error fetching data:", error);
-      });
-  }, []);
+      }
+    };
 
+    fetchData();
+  }, []);
+  
   const extractHorseData = (html) => {
     const $ = cheerio.load(html);
     const horseData = [];
@@ -85,21 +96,20 @@ function DolphinOwner() {
           console.log(daysUntilRace);
           // console.log(raceDateMoment);
 
-           const combinedDateTime = moment({
-        year: raceDateMoment.year(),
-        month: raceDateMoment.month(),
-        day: raceDateMoment.date(),
-        hour: gmtTime.hours(),
-        minute: gmtTime.minutes(),
-      });
+          const combinedDateTime = moment({
+            year: raceDateMoment.year(),
+            month: raceDateMoment.month(),
+            day: raceDateMoment.date(),
+            hour: gmtTime.hours(),
+            minute: gmtTime.minutes(),
+          });
 
-    //  raceDayWithTimeGMT.push({
-    //    horseName,
-    //    racecourse,
-    //    raceDay: combinedDateTime.format("YYYY-MM-DD HH:mm:ss"),
-    //    daysUntilRace, // Assign the calculated daysUntilRace here
-    //  });
-  
+          //  raceDayWithTimeGMT.push({
+          //    horseName,
+          //    racecourse,
+          //    raceDay: combinedDateTime.format("YYYY-MM-DD HH:mm:ss"),
+          //    daysUntilRace, // Assign the calculated daysUntilRace here
+          //  });
 
           horseData.push({
             raceDay: raceDate,
@@ -114,7 +124,7 @@ function DolphinOwner() {
           });
         });
     });
-     
+
     console.log(horseData);
     setHorseData(horseData);
   };
@@ -193,27 +203,26 @@ function DolphinOwner() {
   //   return `${hours}h ${minutes}m ${seconds}s until race time`;
   // };
 
-const calculateTimeUntilPost = (actualRaceDay) => {
-  const raceTime = moment(actualRaceDay, "YYYY-MM-DD HH:mm:ss");
-  const currentTime = moment();
-  const duration = moment.duration(raceTime.diff(currentTime));
+  const calculateTimeUntilPost = (actualRaceDay) => {
+    const raceTime = moment(actualRaceDay, "YYYY-MM-DD HH:mm:ss");
+    const currentTime = moment();
+    const duration = moment.duration(raceTime.diff(currentTime));
 
-  const days = duration.days();
-  const hours = duration.hours();
-  const minutes = duration.minutes();
-  const seconds = duration.seconds();
+    const days = duration.days();
+    const hours = duration.hours();
+    const minutes = duration.minutes();
+    const seconds = duration.seconds();
 
-  if (days < 0) {
-    return "Race Over";
-  }
+    if (days < 0) {
+      return "Race Over";
+    }
 
-  if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
-    return "Race Tonight";
-  }
+    if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
+      return "Race Tonight";
+    }
 
-  return `${days}d ${hours}hrs ${minutes}mins ${seconds}sec until POST TIME`;
-};
-
+    return `${days}d ${hours}hrs ${minutes}mins ${seconds}sec until Post Time`;
+  };
 
   // const calculateTimeUntilPost = (timeGMT, raceDate) => {
   //   // Get the current date in "YYYY-MM-DD" format
@@ -244,9 +253,31 @@ const calculateTimeUntilPost = (actualRaceDay) => {
   //     return "Not Race Day";
   //   }
   // };
+  const startCountdown = () => {
+    const countdownInterval = setInterval(() => {
+      setCountdown((prevCountdown) => prevCountdown - 1);
+
+      // Reset the countdown to 60 seconds when it reaches 0
+      if (countdown === 0) {
+        setCountdown(60);
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(countdownInterval);
+    };
+  };
+
+  if (isLoading) {
+    // While loading, display a loading spinner or message
+    return <div className="loading-spinner">Loading...</div>;
+  }
 
   return (
     <div>
+      <div className="world-times"> <Time/></div>
+      {/* <div className="countdown">Countdown: {countdown} seconds</div> */}
+
       <div className="container">
         <div className="scrollable-content">
           <div className="dolphin-content"></div>
