@@ -221,7 +221,7 @@ function DolphinOwner() {
       return "Race Tonight";
     }
 
-    return `${days}d ${hours}hrs ${minutes}mins ${seconds}sec until POST TIME`;
+    return `${days}d ${hours}hrs ${minutes}mins ${seconds}sec until Post Time`;
   };
 
   // const calculateTimeUntilPost = (timeGMT, raceDate) => {
