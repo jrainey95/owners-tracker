@@ -2,17 +2,17 @@
   display: grid;
   color: rgb(0, 0, 0);
   grid-template-columns: repeat(7, 1fr);
-  /* Create 5 equal-width columns */
-  grid-gap: 10px;
-  /* Adjust the gap between items as needed */
+  max-width: 80%;
+  margin: 0 auto;
+  /* Center the grid horizontally */
+  /* Add any other styles you need */
 }
 .h2-world-header {
-    grid-template-columns: repeat(7, 1fr);
+  display: row;
+  background-color: #333;
 }
 
-div {
-  color: whtite;
-}
+
 
 .h2-world-header {
   color: #ffffff;

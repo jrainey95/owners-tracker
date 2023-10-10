@@ -9,7 +9,7 @@ export default function Navbar() {
   return (
     <nav>
       <div>
-        <h1>DOLPHIN TRACKER</h1>
+        <h1 className='dolphin-tracker'>DOLPHIN TRACKER</h1>
 
         <div className="navbar-container">
           <ul className="navbar-nav ml-auto">
@@ -19,8 +19,8 @@ export default function Navbar() {
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/search" className="nav-link">
-                SEARCH
+              <Link to="/owners/godolphin" className="nav-link">
+                GODOLPHIN
               </Link>
             </li>
             <li className="nav-item">

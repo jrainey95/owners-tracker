@@ -2,7 +2,12 @@ h1 {
   padding: 25px;
   display: block;
   justify-content: flex-start;
-  color: aqua;
+  color: rgb(0, 0, 0);
+}
+
+h1.dolphin-tracker {
+  color: #ffffff;
+  background-color: #0037b2;;
 }
 
 ul  {
@@ -13,6 +18,7 @@ ul  {
     justify-content: flex-end;
     border-right: 20px;
     gap: 7px;
+    
     
   }
 
