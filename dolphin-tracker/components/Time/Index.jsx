@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import "./index.scss";
 import moment from "moment-timezone";
 import WorldClock from "../WorldClock/Index";
-import England from "../../England/Index";
-// import EnglandWorldClock from "../WorldClock/England/Index";
+
+
 
 function Time() {
   const [times, setTimes] = useState({});
@@ -68,16 +68,38 @@ function Time() {
   }
 
   return (
-    <div>
-      <div className="h2-world-header">World Clocks</div>
-      <div className="pst-clock">
-        
-        <WorldClock />
-        </div>
-      
-      {/* <div className="england-clock"> 
-      <England/>
-      </div> */}
+  <div>
+    <div className="div-world-times">
+      <div className="world-clock">
+        <h2 className="h2-world-header">England</h2>
+        <WorldClock timeZone="Europe/London" />
+      </div>
+      <div className="world-clock">
+        <h2 className="h2-world-header">Paris France</h2>
+        <WorldClock timeZone="Europe/Paris" />
+      </div>
+      <div className="world-clock">
+        <h2 className="h2-world-header">AEST</h2>
+        <WorldClock timeZone="Australia/Brisbane" />
+      </div>
+      <div className="world-clock">
+        <h2 className="h2-world-header">AEDT</h2>
+        <WorldClock timeZone="Australia/Sydney" />
+      </div>
+      <div className="world-clock">
+        <h2 className="h2-world-header">Japan</h2>
+        <WorldClock timeZone="Asia/Tokyo" />
+      </div>
+      <div className="world-clock">
+        <h2 className="h2-world-header">EST</h2>
+        <WorldClock timeZone="America/New_York" />
+      </div>
+      <div className="world-clock">
+        <h2 className="h2-world-header">PST</h2>
+        <WorldClock timeZone="America/Los_Angeles" />
+      </div>
+    </div>
+
 
       <div className="div-world-times">
         <div>England: {times.kemptonTime}</div>

@@ -1,10 +1,13 @@
 .div-world-times {
   display: grid;
-  color: whtite;
+  color: rgb(0, 0, 0);
   grid-template-columns: repeat(7, 1fr);
   /* Create 5 equal-width columns */
   grid-gap: 10px;
   /* Adjust the gap between items as needed */
+}
+.h2-world-header {
+    grid-template-columns: repeat(7, 1fr);
 }
 
 div {
