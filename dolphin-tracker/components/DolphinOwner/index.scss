@@ -1,6 +1,5 @@
 /* index.scss */
 .container {
-  background-color: #0037b2;
   display: flex;
   justify-content: space-between;
   margin: 20px;
@@ -19,6 +18,13 @@
   /* Add any other styles for the time-content here */
 }
 
+table 
+{width: 100%;
+  border-collapse: collapse;
+      text-indent: initial;
+        border-spacing: 2px;
+}
+
 /* Add styles for the time-container and table as needed */
 /* Adjust the race times container */
 .race-times-container {
@@ -33,11 +39,12 @@
 
 /* Style the first cell in each row */
 tr td:first-child {
+ 
   background-color: #d9f3fd;
 }
 
 /* Style the accordion header */
-.ui-accordion .ui-accordion__header  {
+.ui-accordion .ui-accordion__header {
   color: #0037b2;
   font-size: 20px;
   padding: 16px 8px;
@@ -49,6 +56,8 @@ tr td:first-child {
 
 /* Style the table container with horizontal scrolling */
 .table-container {
+max-height: 10000px;
+  /* Adjust the value to match the max-height of scrollable-content */
   border: 1px solid #ccc;
   padding: 20px;
   margin: 20px;
@@ -56,10 +65,7 @@ tr td:first-child {
 }
 
 /* Style the table */
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
+
 
 /* Style the table header */
 thead {
@@ -87,32 +93,45 @@ table tr th {
   font-size: 15px;
   font-weight: 400;
 }
+/* Style table rows */
+tr {
+  background-color: #fff;
+}
 
-th.horse {
-  font-family: 'Open Sans', sans-serif;
-  padding: 18px 8px; /* Adjust the padding as needed */
-  color: #fff;
-  background-color: #0037b2;
-  font-size: 15px;
-  font-weight: 400;
+/* Style every other table row */
+tr:nth-child(even) {
+  background-color: #ffffff;
+  /* Change this color as needed */
+}
+
+/* Style every other table row (odd rows) with a different background color */
+tr:nth-child(odd) {
+  background-color: #e5e5e5;
+  /* Change this color as needed */
 }
 body {
   overflow-y: auto;
   color: #333;
 }
 
-header {
+.th-colspan {
   color: #0037b2;
+  background-color:#ffffff;
+  padding: 13px 8px;
   font-size: 20px;
-  padding: 16px 8px;
-  border: 1px solid #efefef;
-  border-bottom-width: 3px;
+  font-family: 'Open Sans', sans-serif;
   font-weight: 600;
-  background-color: #ffffff;
 }
 
-td.horse {
-    font: 300 14px/1.4 "Helvetica Neue", sans-serif;
-    padding: 20px;
-    border: 1px solid #ddd;
+.horse {
+  
+
+  padding: 22px;
+  
+  /* Adjust the value as needed */
+}
+
+.name {
+  color: #0037b2;
+  padding: 30px;
 }
