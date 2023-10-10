@@ -12,8 +12,6 @@ function DolphinOwner() {
   const [countdown, setCountdown] = useState(60);
   const [isLoading, setIsLoading] = useState(true);
   const currentJapanDate = moment().tz("Asia/Tokyo").format("DD-MM-YYYY");
-  const [isWorldTimesVisible, setIsWorldTimesVisible] = useState(true);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,7 +57,7 @@ function DolphinOwner() {
       "Newmarket                (GB)": 8, // GMT+8
       "Newcastle (AW)                (GB)": 8,
       "Chantilly                (FR)": 9, // GMT+8
-      "Warwick Farm                (AUS)": 18,
+      "Warwick Farm                (AUS)": 17,
       "Chelmsford (AW)                (GB)": 8,
       "Goodwood                (GB)": 8,
       // Add more racecourses and their offsets as needed
@@ -118,8 +116,6 @@ function DolphinOwner() {
             
           });
 
-          
-
           //  raceDayWithTimeGMT.push({
           //    horseName,
           //    racecourse,
@@ -141,7 +137,6 @@ function DolphinOwner() {
             jockey,
             raceData,
             raceName,
-            
           });
         });
     });
@@ -239,23 +234,10 @@ function DolphinOwner() {
   //   return `${hours}h ${minutes}m ${seconds}s until race time`;
   // };
 
-  const calculateTimeUntilPost = (actualRaceDay, racecourse, racecourseOffsets) => {
-  if (!racecourseOffsets) {
-    // Handle the case where racecourseOffsets is not defined
-    return "Racecourse offset not found";
-  }
-    // Get the race time for the specific horse and racecourse
+  const calculateTimeUntilPost = (actualRaceDay) => {
     const raceTime = moment(actualRaceDay, "YYYY-MM-DD HH:mm:ss");
-    const racecourseOffset = racecourseOffsets[racecourse];
-    if (racecourseOffset === undefined) {
-      return "Invalid Racecourse";
-    }
-
-    // Adjust the race time with the racecourse's time zone offset
-    const raceTimeWithOffset = raceTime.clone().add(racecourseOffset, "hours");
-
     const currentTime = moment();
-    const duration = moment.duration(raceTimeWithOffset.diff(currentTime));
+    const duration = moment.duration(raceTime.diff(currentTime));
 
     const days = duration.days();
     const hours = duration.hours();
@@ -270,15 +252,8 @@ function DolphinOwner() {
       return "Race Tonight";
     }
 
-    if (days === 0) {
-      return hours > 0
-        ? `${hours}hrs ${minutes}mins ${seconds}sec until Post Time`
-        : `${minutes}mins ${seconds}sec until Post Time`;
-    } else {
-      return `${days}d ${hours}hrs ${minutes}mins ${seconds}sec until Post Time`;
-    }
+    return `${days}d ${hours}hrs ${minutes}mins ${seconds}sec until Post Time`;
   };
-
 
   // const calculateTimeUntilPost = (timeGMT, raceDate) => {
   //   // Get the current date in "YYYY-MM-DD" format
@@ -328,26 +303,10 @@ function DolphinOwner() {
     // While loading, display a loading spinner or message
     return <div className="loading-spinner">Loading...</div>;
   }
-  const toggleWorldTimes = () => {
-    setIsWorldTimesVisible(!isWorldTimesVisible);
-  };
-
 
   return (
     <div>
-
-   
-    <div>
-        <img src="../public/img/godolphin-logo.webp" alt="Godolphin Logo" />
-      </div>
-   
-     <div className="button-container">
-      <button className="toggle-off" onClick={toggleWorldTimes}>Toggle World Times</button>
-      {isWorldTimesVisible && (
-        <div className="world-times">
-          <Time />
-        </div>
-      )}
+      <div className="world-times"> <Time/></div>
       {/* <div className="countdown">Countdown: {countdown} seconds</div> */}
 
       
@@ -374,7 +333,7 @@ function DolphinOwner() {
           </table>
         </div>
       </div>
-    </div>
+    
   );
 }
 
