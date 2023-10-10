@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./index.scss";
 import moment from "moment-timezone";
+import WorldClock from "../WorldClock/Index";
+import England from "../../England/Index";
+// import EnglandWorldClock from "../WorldClock/England/Index";
 
 function Time() {
   const [times, setTimes] = useState({});
@@ -65,14 +68,26 @@ function Time() {
   }
 
   return (
-    <div className="div-world-times">
-      <div>England: {times.kemptonTime}</div>
-      <div>France: {times.chantillyTime}</div>
-      <div>AEST(Rosehill, Warwick) Australia: {times.aestQldTime}</div>
-      <div>AEDT(Kensington) Australia: {times.kensingtonTime}</div>
-      <div>Japan: {times.jpnTime}</div>
-      <div>Eastern Standard Time: {times.newYorkTime}</div>
-      <div>Pacific Standard Time: {times.pacificStandardTime}</div>
+    <div>
+      <div className="h2-world-header">World Clocks</div>
+      <div className="pst-clock">
+        
+        <WorldClock />
+        </div>
+      
+      {/* <div className="england-clock"> 
+      <England/>
+      </div> */}
+
+      <div className="div-world-times">
+        <div>England: {times.kemptonTime}</div>
+        <div>France: {times.chantillyTime}</div>
+        <div>AEST(Rosehill, Warwick) Australia: {times.aestQldTime}</div>
+        <div>AEDT(Kensington) Australia: {times.kensingtonTime}</div>
+        <div>Japan: {times.jpnTime}</div>
+        <div>Eastern Standard Time: {times.newYorkTime}</div>
+        <div>Pacific Standard Time: {times.pacificStandardTime}</div>
+      </div>
     </div>
   );
 }
