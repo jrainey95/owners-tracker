@@ -1,6 +1,6 @@
-// Time.jsx
 import React, { useState, useEffect, useRef } from "react";
 import "./index.scss";
+import moment from "moment-timezone";
 
 function Time() {
   const [times, setTimes] = useState({});
@@ -11,39 +11,29 @@ function Time() {
   useEffect(() => {
     const fetchTimes = () => {
       try {
-        const kemptonNow = new Date().toLocaleString("en-GB", {
-          timeZone: "Europe/London",
-        });
+        const kemptonTime = moment().tz("Europe/London").format("h:mm:ss A");
+        const chantillyTime = moment().tz("Europe/Paris").format("h:mm:ss A");
+        const kensingtonTime = moment()
+          .tz("Australia/Sydney")
+          .format("h:mm:ss A");
+        const jpnTime = moment().tz("Asia/Tokyo").format("h:mm:ss A");
+        const newYorkTime = moment().tz("America/New_York").format("h:mm:ss A");
+        const pacificStandardTime = moment()
+          .tz("America/Los_Angeles")
+          .format("h:mm:ss A");
+        const aestQldTime = moment()
+              .tz("Australia/Queensland")
+              .format("h:mm:ss A");
 
-        const chantillyNow = new Date().toLocaleString("fr-FR", {
-          timeZone: "Europe/Paris",
-        });
-
-        const kensingtonNow = new Date().toLocaleString("en-AU", {
-          timeZone: "Australia/Sydney",
-        });
-
-        const rosehillNow = new Date().toLocaleString("en-AU", {
-          timeZone: "Australia/Sydney",
-        });
-
-        const newYorkNow = new Date().toLocaleString("en-US", {
-          timeZone: "America/New_York",
-        });
-
-        const kemptonTimeInMs = new Date(kemptonNow).getTime();
-        const pstTimeInMs = kemptonTimeInMs - 8 * 60 * 60 * 1000;
-        const pstTimeStr = new Date(pstTimeInMs).toLocaleString("en-US", {
-          timeZone: "America/Los_Angeles",
-        });
 
         const formattedTimes = {
-          kemptonTime: formatTime(kemptonNow),
-          chantillyTime: formatTime(chantillyNow),
-          kensingtonTime: formatTime(kensingtonNow),
-          rosehillTime: formatTime(rosehillNow),
-          newYorkTime: formatTime(newYorkNow),
-          pstTime: formatTime(pstTimeStr),
+          kemptonTime,
+          chantillyTime,
+          kensingtonTime,
+          jpnTime,
+          newYorkTime,
+          pacificStandardTime,
+          aestQldTime,
         };
 
         setTimes(formattedTimes);
@@ -66,16 +56,6 @@ function Time() {
     return () => clearInterval(intervalRef.current);
   }, []);
 
-  const formatTime = (time) => {
-    const options = {
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-      hour12: false,
-    };
-    return new Date(time).toLocaleTimeString([], options);
-  };
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -86,12 +66,13 @@ function Time() {
 
   return (
     <div className="div-world-times">
-      <div>Kempton, England (GMT): {times.kemptonTime}</div>
-      <div>Chantilly, France (CET): {times.chantillyTime}</div>
-      <div>Kensington, Australia (AEDT): {times.kensingtonTime}</div>
-      <div>Rosehill, Australia (AEST): {times.rosehillTime}</div>
-      <div>New York/Kentucky, USA (EST): {times.newYorkTime}</div>
-      <div>Kempton Time converted to PST: {times.pstTime}</div>
+      <div>England: {times.kemptonTime}</div>
+      <div>France: {times.chantillyTime}</div>
+      <div>AEST(Rosehill, Warwick) Australia: {times.aestQldTime}</div>
+      <div>AEDT(Kensington) Australia: {times.kensingtonTime}</div>
+      <div>Japan: {times.jpnTime}</div>
+      <div>Eastern Standard Time: {times.newYorkTime}</div>
+      <div>Pacific Standard Time: {times.pacificStandardTime}</div>
     </div>
   );
 }
