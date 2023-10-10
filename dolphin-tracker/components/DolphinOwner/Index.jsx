@@ -12,6 +12,8 @@ function DolphinOwner() {
   const [countdown, setCountdown] = useState(60);
   const [isLoading, setIsLoading] = useState(true);
   const currentJapanDate = moment().tz("Asia/Tokyo").format("DD-MM-YYYY");
+  const [isWorldTimesVisible, setIsWorldTimesVisible] = useState(true);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,7 +59,7 @@ function DolphinOwner() {
       "Newmarket                (GB)": 8, // GMT+8
       "Newcastle (AW)                (GB)": 8,
       "Chantilly                (FR)": 9, // GMT+8
-      "Warwick Farm                (AUS)": 17,
+      "Warwick Farm                (AUS)": -18,
       "Chelmsford (AW)                (GB)": 8,
       "Goodwood                (GB)": 8,
       // Add more racecourses and their offsets as needed
@@ -234,7 +236,7 @@ function DolphinOwner() {
   //   return `${hours}h ${minutes}m ${seconds}s until race time`;
   // };
 
-  const calculateTimeUntilPost = (actualRaceDay) => {
+  const calculateTimeUntilPost = (actualRaceDay, racecourse) => {
     const raceTime = moment(actualRaceDay, "YYYY-MM-DD HH:mm:ss");
     const currentTime = moment();
     const duration = moment.duration(raceTime.diff(currentTime));
@@ -252,8 +254,26 @@ function DolphinOwner() {
       return "Race Tonight";
     }
 
-    return `${days}d ${hours}hrs ${minutes}mins ${seconds}sec until Post Time`;
+    // Add a condition for AUS and JPN races that run tonight
+    if (
+      (racecourse === "Hawkesbury                (AUS)" ||
+        racecourse === "Warwick Farm                (AUS)" ||
+        racecourse === "Kyoto                (JPN)" ||
+        racecourse === "Tokyo                (JPN)") &&
+      hours >= 0
+    ) {
+      return "Race Tonight"; // Display "Race Tonight" for races scheduled for the same day in AUS and JPN
+    }
+
+    if (days === 0) {
+      return hours > 0
+        ? `${hours}hrs ${minutes}mins ${seconds}sec until Post Time`
+        : `${minutes}mins ${seconds}sec until Post Time`;
+    } else {
+      return `${days}d ${hours}hrs ${minutes}mins ${seconds}sec until Post Time`;
+    }
   };
+
 
   // const calculateTimeUntilPost = (timeGMT, raceDate) => {
   //   // Get the current date in "YYYY-MM-DD" format
@@ -303,10 +323,26 @@ function DolphinOwner() {
     // While loading, display a loading spinner or message
     return <div className="loading-spinner">Loading...</div>;
   }
+  const toggleWorldTimes = () => {
+    setIsWorldTimesVisible(!isWorldTimesVisible);
+  };
+
 
   return (
     <div>
-      <div className="world-times"> <Time/></div>
+
+   
+    <div>
+        <img src="../public/img/godolphin-logo.webp" alt="Godolphin Logo" />
+      </div>
+   
+     <div className="button-container">
+      <button className="toggle-off" onClick={toggleWorldTimes}>Toggle World Times</button>
+      {isWorldTimesVisible && (
+        <div className="world-times">
+          <Time />
+        </div>
+      )}
       {/* <div className="countdown">Countdown: {countdown} seconds</div> */}
 
       
@@ -333,7 +369,7 @@ function DolphinOwner() {
           </table>
         </div>
       </div>
-    
+    </div>
   );
 }
 

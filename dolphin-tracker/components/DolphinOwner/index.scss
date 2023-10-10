@@ -33,6 +33,10 @@ span.jockey {
     /* Adjust the maximum width as per your design */
     margin: 0 auto;
 }
+button.toggle-off {
+    justify-content: flex-start;
+    display: flex;
+}
 
 table 
 {width: 100%;

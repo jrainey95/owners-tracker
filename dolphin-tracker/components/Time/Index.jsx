@@ -69,9 +69,8 @@ function Time() {
 
   return (
     <div>
-      <div>
-        <img src="../public/img/godolphin-logo.webp" alt="Godolphin Logo" />
-      </div>
+      
+      
 
       <div className="div-world-times">
         <div className="world-clock">
@@ -79,7 +78,7 @@ function Time() {
           <WorldClock timeZone="Europe/London" />
         </div>
         <div className="world-clock">
-          <h2 className="h2-world-header">Paris France</h2>
+          <h2 className="h2-world-header">France</h2>
           <WorldClock timeZone="Europe/Paris" />
         </div>
         <div className="world-clock">
@@ -96,22 +95,22 @@ function Time() {
         </div>
         <div className="world-clock">
           <h2 className="h2-world-header">EST</h2>
-          <WorldClock timeZone="America/New York" />
+          <WorldClock timeZone="America/New_York" />
         </div>
         <div className="world-clock">
           <h2 className="h2-world-header">PST</h2>
-          <WorldClock timeZone="America/San Diego" />
+          <WorldClock timeZone="America/Los_Angeles" />
         </div>
       </div>
 
       <div className="div-world-times">
-        <div>England: {times.kemptonTime}</div>
-        <div>France: {times.chantillyTime}</div>
-        <div>AEST: {times.aestQldTime}</div>
-        <div>AEDT: {times.kensingtonTime}</div>
-        <div>Japan: {times.jpnTime}</div>
-        <div>EST: {times.newYorkTime}</div>
-        <div>PST: {times.pacificStandardTime}</div>
+        <div>{times.kemptonTime}</div>
+        <div>{times.chantillyTime}</div>
+        <div>{times.aestQldTime}</div>
+        <div>{times.kensingtonTime}</div>
+        <div>{times.jpnTime}</div>
+        <div>{times.newYorkTime}</div>
+        <div>{times.pacificStandardTime}</div>
       </div>
     </div>
   );
