@@ -4,14 +4,12 @@ import cheerio from "cheerio";
 import moment from "moment-timezone";
 import Time from "../Time/Index";
 import "./index.scss";
-// const moment = require("moment-timezone");
-// require("moment-timezone/builds/moment-timezone-with-data-2022-02"); // Replace with your custom data file
 
 function DolphinOwner() {
   const [data, setData] = useState("");
   const [horseData, setHorseData] = useState([]);
   const [headerDate, setHeaderDate] = useState("");
-
+  const currentJapanDate = moment().tz("Asia/Tokyo").format("DD-MM-YYYY"); // Current date in Japan timezone
   useEffect(() => {
     fetch("http://localhost:3001/api/fetchData")
       .then((response) => response.text())
@@ -45,7 +43,11 @@ function DolphinOwner() {
       "Wolverhampton (AW)                (GB)": 8, // GMT+8
       "Lyon Parilly                (FR)": 8, // GMT+8
       "Newmarket                (GB)": 8, // GMT+8
-      "Newcastle (AW)                (GB)": 8, // GMT+8
+      "Newcastle (AW)                (GB)": 8,
+      "Chantilly                (FR)": 9, // GMT+8
+      "Warwick Farm                (AUS)": 17,
+      "Chelmsford (AW)                (GB)": 8,
+      "Goodwood                (GB)": 8,
       // Add more racecourses and their offsets as needed
     };
 
@@ -71,17 +73,48 @@ function DolphinOwner() {
 
           const localTime = moment.tz(timeLocal, "HH:mm", timeZoneIdentifier);
           const gmtTime = localTime.clone().subtract(timeZoneOffset, "hours");
+          const currentDate = moment().format("DD MMMM YYYY");
+
+          const raceDateMoment = moment(raceDate, "DD MMMM YYYY");
+
+          const raceDateTime = moment(
+            `${raceDateMoment.format("DD MMMM YYYY")} ${timeLocal}`,
+            "DD MMMM YYYY HH:mm A"
+          );
+          const daysUntilRace = raceDateTime.diff(currentDate, "days");
+          console.log(daysUntilRace);
+          // console.log(raceDateMoment);
+
+           const combinedDateTime = moment({
+        year: raceDateMoment.year(),
+        month: raceDateMoment.month(),
+        day: raceDateMoment.date(),
+        hour: gmtTime.hours(),
+        minute: gmtTime.minutes(),
+      });
+
+    //  raceDayWithTimeGMT.push({
+    //    horseName,
+    //    racecourse,
+    //    raceDay: combinedDateTime.format("YYYY-MM-DD HH:mm:ss"),
+    //    daysUntilRace, // Assign the calculated daysUntilRace here
+    //  });
+  
 
           horseData.push({
             raceDay: raceDate,
+            actualRaceDay: combinedDateTime.format("YYYY-MM-DD HH:mm:ss"),
             horseName,
             racecourse,
+            currentJapanDate,
             timeLocal: localTime.format("hh:mm A"),
             timeGMT: gmtTime.format("hh:mm A"),
+            adjustedCurrentDate: currentDate,
+            daysUntilRace,
           });
         });
     });
-
+     
     console.log(horseData);
     setHorseData(horseData);
   };
@@ -104,7 +137,9 @@ function DolphinOwner() {
               <td className="name">{horse.horseName}</td>
               <td>{horse.timeLocal}</td>
               <td>{horse.timeGMT}</td>
-              <td>{calculateTimeUntilPost(horse.timeGMT, horse.racecourse)}</td>
+              {/* <td>{horse.daysUntilRace}{calculateTimeUntilPost(horse.timeGMT, horse.racecourse)}</td> */}
+              <td>{calculateTimeUntilPost(horse.actualRaceDay)}</td>
+
               <td>
                 <button className="button-alert">ALERT</button>
                 <button className="button-alert-all">ALERT ALL</button>
@@ -158,61 +193,27 @@ function DolphinOwner() {
   //   return `${hours}h ${minutes}m ${seconds}s until race time`;
   // };
 
-  const calculateTimeUntilPost = (timeGMT, racecourse) => {
-    const raceTime = moment.tz(timeGMT, "hh:mm A", "Etc/GMT+7"); // Assuming GMT+8 for the race time
-    const currentTime = moment();
-    const duration = moment.duration(raceTime.diff(currentTime));
-    const currentDate = moment().format("DD-MM-YYYY");
-    console.log(currentDate);
+const calculateTimeUntilPost = (actualRaceDay) => {
+  const raceTime = moment(actualRaceDay, "YYYY-MM-DD HH:mm:ss");
+  const currentTime = moment();
+  const duration = moment.duration(raceTime.diff(currentTime));
 
-    if (duration.asSeconds() <= 0) {
-      return "Race Over";
-    }
+  const days = duration.days();
+  const hours = duration.hours();
+  const minutes = duration.minutes();
+  const seconds = duration.seconds();
 
-    //   if (currentDate !== currentTime) {
-    //     return "Not Race Day";
-    //     // console.log(currentDate);
-    //   } else if (duration.asSeconds() <= 0) {
-    //     return "Race Over";
-    //   }
+  if (days < 0) {
+    return "Race Over";
+  }
 
-    if (
-      racecourse === "Kyoto                (JPN)" ||
-      racecourse === "Tokyo                (JPN)" ||
-      racecourse === "Hawkesbury                (AUS)"
-    ) {
-      // Check if the race is scheduled for the following day
-      const tomorrow = moment().add(1, "day");
-      const raceTimeAUS = moment.tz(timeGMT, "hh:mm A", "Etc/GMT+7"); // Australian time zone (GMT+11)
-      if (
-        moment(raceTimeAUS).isAfter(
-          moment(tomorrow.format("YYYY-MM-DD") + " 00:00", "YYYY-MM-DD HH:mm")
-        )
+  if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
+    return "Race Tonight";
+  }
 
-        //   if (currentDate !== currentTime) {
-        //     return "Not Race Day";
-        //     // console.log(currentDate);
-        //   } else if (duration.asSeconds() <= 0) {
-        //     return "Race Over";
-        //   }
-      ) {
-        const timeUntilRace = moment.duration(raceTimeAUS.diff(moment()));
-        return `Tonight at ${raceTimeAUS.format(
-          "hh:mm A"
-        )} (${timeUntilRace.hours()}h ${timeUntilRace.minutes()}m ${timeUntilRace.seconds()}s until race time)`;
-      }
-    }
+  return `${days}d ${hours}hrs ${minutes}mins ${seconds}sec until POST TIME`;
+};
 
-    const hours = Math.floor(duration.asHours());
-    const minutes = duration.minutes();
-    const seconds = duration.seconds();
-
-    if (hours === 0 && minutes === 0 && seconds === 0) {
-      return "Race Tonight";
-    }
-    console.log(currentTime);
-    return `${hours}h ${minutes}m ${seconds}s until race time`;
-  };
 
   // const calculateTimeUntilPost = (timeGMT, raceDate) => {
   //   // Get the current date in "YYYY-MM-DD" format
