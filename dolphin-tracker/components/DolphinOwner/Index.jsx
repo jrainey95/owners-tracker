@@ -59,7 +59,7 @@ function DolphinOwner() {
       "Newmarket                (GB)": 8, // GMT+8
       "Newcastle (AW)                (GB)": 8,
       "Chantilly                (FR)": 9, // GMT+8
-      "Warwick Farm                (AUS)": -18,
+      "Warwick Farm                (AUS)": 18,
       "Chelmsford (AW)                (GB)": 8,
       "Goodwood                (GB)": 8,
       // Add more racecourses and their offsets as needed
@@ -118,6 +118,8 @@ function DolphinOwner() {
             
           });
 
+          
+
           //  raceDayWithTimeGMT.push({
           //    horseName,
           //    racecourse,
@@ -139,6 +141,7 @@ function DolphinOwner() {
             jockey,
             raceData,
             raceName,
+            
           });
         });
     });
@@ -236,10 +239,23 @@ function DolphinOwner() {
   //   return `${hours}h ${minutes}m ${seconds}s until race time`;
   // };
 
-  const calculateTimeUntilPost = (actualRaceDay, racecourse) => {
+  const calculateTimeUntilPost = (actualRaceDay, racecourse, racecourseOffsets) => {
+  if (!racecourseOffsets) {
+    // Handle the case where racecourseOffsets is not defined
+    return "Racecourse offset not found";
+  }
+    // Get the race time for the specific horse and racecourse
     const raceTime = moment(actualRaceDay, "YYYY-MM-DD HH:mm:ss");
+    const racecourseOffset = racecourseOffsets[racecourse];
+    if (racecourseOffset === undefined) {
+      return "Invalid Racecourse";
+    }
+
+    // Adjust the race time with the racecourse's time zone offset
+    const raceTimeWithOffset = raceTime.clone().add(racecourseOffset, "hours");
+
     const currentTime = moment();
-    const duration = moment.duration(raceTime.diff(currentTime));
+    const duration = moment.duration(raceTimeWithOffset.diff(currentTime));
 
     const days = duration.days();
     const hours = duration.hours();
@@ -252,17 +268,6 @@ function DolphinOwner() {
 
     if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
       return "Race Tonight";
-    }
-
-    // Add a condition for AUS and JPN races that run tonight
-    if (
-      (racecourse === "Hawkesbury                (AUS)" ||
-        racecourse === "Warwick Farm                (AUS)" ||
-        racecourse === "Kyoto                (JPN)" ||
-        racecourse === "Tokyo                (JPN)") &&
-      hours >= 0
-    ) {
-      return "Race Tonight"; // Display "Race Tonight" for races scheduled for the same day in AUS and JPN
     }
 
     if (days === 0) {
