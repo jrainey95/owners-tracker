@@ -3,6 +3,7 @@ import parse from "html-react-parser";
 import cheerio from "cheerio";
 import moment from "moment-timezone";
 import Time from "../Time/Index";
+import { Link } from "react-router-dom";
 import "./index.scss";
 
 function DolphinOwner() {
@@ -72,6 +73,16 @@ function DolphinOwner() {
           const horseName = $(row).find(".horse-name a").text().trim();
           const racecourse = $(row).find(".racecourse-name").text().trim();
           const timeLocal = $(row).find(".time").text().trim();
+          const trainerJockey = $(row).find('.trainer').text().trim();
+          const jockey = $(row).find('.jockey').text().trim();
+          const raceName = $(row).find('.race-name').text().trim();
+          const raceData = $(row).find('.race-data').text().trim();
+
+
+
+          // console.log(raceName);
+          //  console.log(raceData);
+
 
           let timeZoneOffset = racecourseOffsets[racecourse] || 0;
 
@@ -102,6 +113,7 @@ function DolphinOwner() {
             day: raceDateMoment.date(),
             hour: gmtTime.hours(),
             minute: gmtTime.minutes(),
+            
           });
 
           //  raceDayWithTimeGMT.push({
@@ -121,6 +133,10 @@ function DolphinOwner() {
             timeGMT: gmtTime.format("hh:mm A"),
             adjustedCurrentDate: currentDate,
             daysUntilRace,
+            trainerJockey,
+            jockey,
+            raceData,
+            raceName,
           });
         });
     });
@@ -144,9 +160,24 @@ function DolphinOwner() {
           .map((horse, index) => (
             <tr key={index}>
               <td>{horse.racecourse}</td>
-              <td className="name">{horse.horseName}</td>
+              <td className="name">
+                <Link to={`owners/godolphin/${horse.horseName}`}>
+                  {horse.horseName}
+                </Link>
+              </td>
+              <td className="trainer-jockey">
+                <span className="trainer">{horse.trainerJockey}</span>
+                <br></br>
+                <span className="jockey">{horse.jockey}</span>
+              </td>
               <td>{horse.timeLocal}</td>
+              <td className="race-details">
+                <span className="race-name">{horse.raceName}</span>
+                <br></br>
+                <span className="race-data">{horse.raceData}</span>
+              </td>
               <td>{horse.timeGMT}</td>
+
               {/* <td>{horse.daysUntilRace}{calculateTimeUntilPost(horse.timeGMT, horse.racecourse)}</td> */}
               <td>{calculateTimeUntilPost(horse.actualRaceDay)}</td>
 
@@ -278,11 +309,7 @@ function DolphinOwner() {
       <div className="world-times"> <Time/></div>
       {/* <div className="countdown">Countdown: {countdown} seconds</div> */}
 
-      <div className="container">
-        <div className="scrollable-content">
-          <div className="dolphin-content"></div>
-          {parse(data)}
-        </div>
+      
 
         <div className="time-content">
           <div className="time-container">
@@ -293,7 +320,9 @@ function DolphinOwner() {
               <tr>
                 <th>Racecourse</th>
                 <th className="horse">Horse</th>
+                <th className="trainer-jockey">Trainer<br></br>Jockey</th>
                 <th>Local Time</th>
+                <th className="horse-details">Race Details</th>
                 <th>PST</th>
                 <th>Minutes Until Post</th>
                 <th>Alert</th>
@@ -304,7 +333,7 @@ function DolphinOwner() {
           </table>
         </div>
       </div>
-    </div>
+    
   );
 }
 

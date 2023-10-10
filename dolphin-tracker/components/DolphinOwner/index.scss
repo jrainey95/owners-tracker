@@ -1,8 +1,25 @@
 /* index.scss */
 .container {
-  display: flex;
-  justify-content: space-between;
-  margin: 20px;
+ 
+}
+span.trainer {
+  font-size: 15px;
+  font-family: 'Open Sans', sans-serif;
+  font-style: bold;
+  line-height: 24px;
+  color: #000000;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+span.jockey {
+  font-size: 15px;
+  font-family: 'Open Sans', sans-serif;
+    line-height: 24px;
+    color: #635f5f;
+    font-weight: 100;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 .scrollable-content {
@@ -12,17 +29,16 @@
 }
 
 .time-content {
-  flex: 1;
-  margin-left: 20px;
-  /* Add spacing from the scrollable-content */
-  /* Add any other styles for the time-content here */
+  max-width: 80%;
+    /* Adjust the maximum width as per your design */
+    margin: 0 auto;
 }
 
 table 
 {width: 100%;
   border-collapse: collapse;
       text-indent: initial;
-        border-spacing: 2px;
+        border-spacing: 2px solid;
 }
 
 /* Add styles for the time-container and table as needed */
@@ -41,6 +57,8 @@ table
 tr td:first-child {
  
   background-color: #d9f3fd;
+  // background-color: #b3d4fc;;
+  // background-color: #f3fbfe;
 }
 
 /* Style the accordion header */
@@ -80,7 +98,7 @@ tr {
 
 /* Style table cells */
 td {
-  padding: 10px;
+  padding: 8px;
   border: 1px solid #ddd;
 }
 
@@ -100,18 +118,26 @@ tr {
 
 /* Style every other table row */
 tr:nth-child(even) {
-  background-color: #ffffff;
-  /* Change this color as needed */
+  // background-color: #ffffff;
+    // background-color: #b3d4fc;;
+      background-color: #e6f5fa;
 }
 
 /* Style every other table row (odd rows) with a different background color */
-tr:nth-child(odd) {
-  background-color: #e5e5e5;
-  /* Change this color as needed */
-}
+// tr:nth-child(odd) {
+//   background-color:#e6f8ff;
+//   text-shadow: none;
+//   /* Change this color as needed */
+// }
 body {
   overflow-y: auto;
+ 
   color: #333;
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 24px;
+    position: relative;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .th-colspan {
@@ -155,4 +181,22 @@ body {
   100% {
     transform: rotate(360deg);
   }
+}
+
+span.race-name {
+      font-size: 15px;
+      line-height: 24px;
+      color: #0037b2;
+        font-weight: 400;
+        font-family: 'Open Sans', sans-serif;
+        text-decoration: none;
+        transition: all .2s ease-in-out;
+}
+
+span.race-data {
+  color: #333;
+  font-weight: 300;
+  line-height: 24px;
+  font-size: 15px;
+
 }

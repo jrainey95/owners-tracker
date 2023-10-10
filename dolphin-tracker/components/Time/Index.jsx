@@ -68,47 +68,50 @@ function Time() {
   }
 
   return (
-  <div>
-    <div className="div-world-times">
-      <div className="world-clock">
-        <h2 className="h2-world-header">England</h2>
-        <WorldClock timeZone="Europe/London" />
+    <div>
+      <div>
+        <img src="../public/img/godolphin-logo.webp" alt="Godolphin Logo" />
       </div>
-      <div className="world-clock">
-        <h2 className="h2-world-header">Paris France</h2>
-        <WorldClock timeZone="Europe/Paris" />
-      </div>
-      <div className="world-clock">
-        <h2 className="h2-world-header">AEST</h2>
-        <WorldClock timeZone="Australia/Brisbane" />
-      </div>
-      <div className="world-clock">
-        <h2 className="h2-world-header">AEDT</h2>
-        <WorldClock timeZone="Australia/Sydney" />
-      </div>
-      <div className="world-clock">
-        <h2 className="h2-world-header">Japan</h2>
-        <WorldClock timeZone="Asia/Tokyo" />
-      </div>
-      <div className="world-clock">
-        <h2 className="h2-world-header">EST</h2>
-        <WorldClock timeZone="America/New_York" />
-      </div>
-      <div className="world-clock">
-        <h2 className="h2-world-header">PST</h2>
-        <WorldClock timeZone="America/Los_Angeles" />
-      </div>
-    </div>
 
+      <div className="div-world-times">
+        <div className="world-clock">
+          <h2 className="h2-world-header">England</h2>
+          <WorldClock timeZone="Europe/London" />
+        </div>
+        <div className="world-clock">
+          <h2 className="h2-world-header">Paris France</h2>
+          <WorldClock timeZone="Europe/Paris" />
+        </div>
+        <div className="world-clock">
+          <h2 className="h2-world-header">AEST</h2>
+          <WorldClock timeZone="Australia/Brisbane" />
+        </div>
+        <div className="world-clock">
+          <h2 className="h2-world-header">AEDT</h2>
+          <WorldClock timeZone="Australia/Sydney" />
+        </div>
+        <div className="world-clock">
+          <h2 className="h2-world-header">Japan</h2>
+          <WorldClock timeZone="Asia/Tokyo" />
+        </div>
+        <div className="world-clock">
+          <h2 className="h2-world-header">EST</h2>
+          <WorldClock timeZone="America/New York" />
+        </div>
+        <div className="world-clock">
+          <h2 className="h2-world-header">PST</h2>
+          <WorldClock timeZone="America/San Diego" />
+        </div>
+      </div>
 
       <div className="div-world-times">
         <div>England: {times.kemptonTime}</div>
         <div>France: {times.chantillyTime}</div>
-        <div>AEST(Rosehill, Warwick) Australia: {times.aestQldTime}</div>
-        <div>AEDT(Kensington) Australia: {times.kensingtonTime}</div>
+        <div>AEST: {times.aestQldTime}</div>
+        <div>AEDT: {times.kensingtonTime}</div>
         <div>Japan: {times.jpnTime}</div>
-        <div>Eastern Standard Time: {times.newYorkTime}</div>
-        <div>Pacific Standard Time: {times.pacificStandardTime}</div>
+        <div>EST: {times.newYorkTime}</div>
+        <div>PST: {times.pacificStandardTime}</div>
       </div>
     </div>
   );
