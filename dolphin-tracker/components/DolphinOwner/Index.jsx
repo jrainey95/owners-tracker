@@ -12,6 +12,8 @@ function DolphinOwner() {
   const [countdown, setCountdown] = useState(60);
   const [isLoading, setIsLoading] = useState(true);
   const currentJapanDate = moment().tz("Asia/Tokyo").format("DD-MM-YYYY");
+  const [isWorldTimesVisible, setIsWorldTimesVisible] = useState(true);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -304,37 +306,50 @@ function DolphinOwner() {
     return <div className="loading-spinner">Loading...</div>;
   }
 
-  return (
-    <div>
-      <div className="world-times"> <Time/></div>
-      {/* <div className="countdown">Countdown: {countdown} seconds</div> */}
+  const toggleWorldTimes = () => {
+    setIsWorldTimesVisible(!isWorldTimesVisible);
+  };
 
-      
-
-        <div className="time-content">
-          <div className="time-container">
-            {/* Render the Time component for different locations */}
-          </div>
-          <table>
-            <thead>
-              <tr>
-                <th>Racecourse</th>
-                <th className="horse">Horse</th>
-                <th className="trainer-jockey">Trainer<br></br>Jockey</th>
-                <th>Local Time</th>
-                <th className="horse-details">Race Details</th>
-                <th>PST</th>
-                <th>Minutes Until Post</th>
-                <th>Alert</th>
-                <th>Save Horse</th>
-              </tr>
-            </thead>
-            {uniqueDates.map((date) => renderHorsesForDate(date))}
-          </table>
-        </div>
-      </div>
+return (
+  <div>
     
-  );
+    <img src="../public/img/godolphin-logo.webp" alt="Godolphin Logo" />
+
+    <div className="toggle-button">
+      <button onClick={toggleWorldTimes}>Toggle World Times</button>
+      {isWorldTimesVisible && (
+        <div className="world-times">
+          <Time />
+        </div>
+      )}
+    </div>
+
+    <div className="time-content">
+      <div className="time-container">
+        {/* Render the Time component for different locations */}
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Racecourse</th>
+            <th className="horse">Horse</th>
+            <th className="trainer-jockey">
+              Trainer<br></br>Jockey
+            </th>
+            <th>Local Time</th>
+            <th className="horse-details">Race Details</th>
+            <th>PST</th>
+            <th>Minutes Until Post</th>
+            <th>Alert</th>
+            <th>Save Horse</th>
+          </tr>
+        </thead>
+        {uniqueDates.map((date) => renderHorsesForDate(date))}
+      </table>
+    </div>
+  </div>
+);
+
 }
 
 export default DolphinOwner;
