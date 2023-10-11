@@ -29,7 +29,7 @@ span.jockey {
 }
 
 .time-content {
-  max-width: 80%;
+  max-width: 50%;
     /* Adjust the maximum width as per your design */
     margin: 0 auto;
 }
@@ -205,4 +205,6 @@ span.race-data {
 
 }
 
-div.toggle-button {}
+div {
+  margin-bottom: 20px;
+}

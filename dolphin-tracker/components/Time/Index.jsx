@@ -83,7 +83,7 @@ function Time() {
         </div>
         <div className="world-clock">
           <h2 className="h2-world-header">AEST</h2>
-          <WorldClock timeZone="Australia/Brisbane" />
+          <WorldClock timeZone="Australia/Melbourne" />
         </div>
         <div className="world-clock">
           <h2 className="h2-world-header">AEDT</h2>
@@ -95,11 +95,11 @@ function Time() {
         </div>
         <div className="world-clock">
           <h2 className="h2-world-header">EST</h2>
-          <WorldClock timeZone="America/New_York" />
+          <WorldClock timeZone="America/Toronto" />
         </div>
         <div className="world-clock">
           <h2 className="h2-world-header">PST</h2>
-          <WorldClock timeZone="America/Los_Angeles" />
+          <WorldClock timeZone="America/Vancouver" />
         </div>
       </div>
 
