@@ -9,7 +9,7 @@ export default function Navbar() {
   return (
     <nav>
       <div>
-        <h1 className='dolphin-tracker'>DOLPHIN TRACKER</h1>
+      
 
         <div className="navbar-container">
           <ul className="navbar-nav ml-auto">

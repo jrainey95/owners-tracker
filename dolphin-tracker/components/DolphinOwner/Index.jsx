@@ -59,7 +59,7 @@ function DolphinOwner() {
       "Newmarket                (GB)": 8, // GMT+8
       "Newcastle (AW)                (GB)": 8,
       "Chantilly                (FR)": 9, // GMT+8
-      "Warwick Farm                (AUS)": 17,
+      "Warwick Farm                (AUS)": 18,
       "Chelmsford (AW)                (GB)": 8,
       "Goodwood                (GB)": 8,
       // Add more racecourses and their offsets as needed
@@ -75,16 +75,13 @@ function DolphinOwner() {
           const horseName = $(row).find(".horse-name a").text().trim();
           const racecourse = $(row).find(".racecourse-name").text().trim();
           const timeLocal = $(row).find(".time").text().trim();
-          const trainerJockey = $(row).find('.trainer').text().trim();
-          const jockey = $(row).find('.jockey').text().trim();
-          const raceName = $(row).find('.race-name').text().trim();
-          const raceData = $(row).find('.race-data').text().trim();
-
-
+          const trainerJockey = $(row).find(".trainer").text().trim();
+          const jockey = $(row).find(".jockey").text().trim();
+          const raceName = $(row).find(".race-name").text().trim();
+          const raceData = $(row).find(".race-data").text().trim();
 
           // console.log(raceName);
           //  console.log(raceData);
-
 
           let timeZoneOffset = racecourseOffsets[racecourse] || 0;
 
@@ -98,6 +95,7 @@ function DolphinOwner() {
           const localTime = moment.tz(timeLocal, "HH:mm", timeZoneIdentifier);
           const gmtTime = localTime.clone().subtract(timeZoneOffset, "hours");
           const currentDate = moment().format("DD MMMM YYYY");
+          // const dateAndTime =moment()+moment.tz(currentTime,)
 
           const raceDateMoment = moment(raceDate, "DD MMMM YYYY");
 
@@ -113,39 +111,76 @@ function DolphinOwner() {
             year: raceDateMoment.year(),
             month: raceDateMoment.month(),
             day: raceDateMoment.date(),
-            hour: gmtTime.hours(),
-            minute: gmtTime.minutes(),
-            
+            hour: localTime.hours(),
+            minute: localTime.minutes(),
           });
 
-          //  raceDayWithTimeGMT.push({
-          //    horseName,
-          //    racecourse,
-          //    raceDay: combinedDateTime.format("YYYY-MM-DD HH:mm:ss"),
-          //    daysUntilRace, // Assign the calculated daysUntilRace here
-          //  });
+      
+          const racecourseOffset = racecourseOffsets[racecourse] || 0;
+          const timeDifference = combinedDateTime
+            .clone()
+            .subtract(racecourseOffset, "hours");
 
-          horseData.push({
-            raceDay: raceDate,
-            actualRaceDay: combinedDateTime.format("YYYY-MM-DD HH:mm:ss"),
-            horseName,
-            racecourse,
-            currentJapanDate,
-            timeLocal: localTime.format("hh:mm A"),
-            timeGMT: gmtTime.format("hh:mm A"),
-            adjustedCurrentDate: currentDate,
-            daysUntilRace,
-            trainerJockey,
-            jockey,
-            raceData,
-            raceName,
+          const formattedTimeDifference = timeDifference.format(
+            "YYYY-MM-DD HH:mm:ss"
+          );
+
+   
+          const newTimeDifference = moment().format("YYYY-MM-DD HH:mm:ss");
+
+        
+          const duration = moment.duration(
+            Math.abs(
+              moment(formattedTimeDifference, "YYYY-MM-DD HH:mm:ss").diff(
+                moment(newTimeDifference, "YYYY-MM-DD HH:mm:ss")
+              )
+            )
+          );
+
+     
+          const howLong = `${duration.days()} days, ${duration.hours()} hours, ${duration.minutes()} minutes, and ${duration.seconds()} seconds`;
+
+          console.log("timeDifference:", formattedTimeDifference);
+          console.log("newTimeDifference:", newTimeDifference);
+          // console.log("howLong:", howLong);
+
+          const currentDateTime = moment().format("YYYY-MM-DD HH:mm:ss");
+
+          console.log(currentDateTime);
+          //  raceDayWithTimeGMT.push({
+            //    horseName,
+            //    racecourse,
+            //    raceDay: combinedDateTime.format("YYYY-MM-DD HH:mm:ss"),
+            //    daysUntilRace, // Assign the calculated daysUntilRace here
+            //  });
+
+             console.log("combine", combinedDateTime.format("YYYY-MM-DD HH:mm:ss"));
+            
+            horseData.push({
+              raceDay: raceDate,
+              actualRaceDay: combinedDateTime.format("YYYY-MM-DD HH:mm:ss"),
+              currentDateTime,
+              horseName,
+              racecourse,
+              currentJapanDate,
+              timeLocal: localTime.format("hh:mm A"),
+              timeGMT: gmtTime.format("hh:mm A"),
+              adjustedCurrentDate: currentDate,
+              daysUntilRace,
+              trainerJockey,
+              jockey,
+              raceData,
+              raceName,
+              howLong,
+            });
           });
         });
-    });
+        
+        console.log(horseData);
+        setHorseData(horseData);
+       
+      };
 
-    console.log(horseData);
-    setHorseData(horseData);
-  };
 
   const uniqueDates = [...new Set(horseData.map((horse) => horse.raceDay))];
 
@@ -181,8 +216,8 @@ function DolphinOwner() {
               <td>{horse.timeGMT}</td>
 
               {/* <td>{horse.daysUntilRace}{calculateTimeUntilPost(horse.timeGMT, horse.racecourse)}</td> */}
-              <td>{calculateTimeUntilPost(horse.actualRaceDay)}</td>
-
+              {/* <td>{calculateTimeUntilPost(horse.actualRaceDay)}</td> */}
+              <td>{horse.howLong}</td>
               <td>
                 <button className="button-alert">ALERT</button>
                 <button className="button-alert-all">ALERT ALL</button>
