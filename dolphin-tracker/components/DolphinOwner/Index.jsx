@@ -62,6 +62,10 @@ function DolphinOwner() {
       "Warwick Farm                (AUS)": 18,
       "Chelmsford (AW)                (GB)": 8,
       "Goodwood                (GB)": 8,
+      "Kyneton                (AUS)": 18,
+      "Kembla Grange                (AUS)": 18,
+      "Windsor                (GB)": 8,
+      "Yarmouth                (GB)": 8,
       // Add more racecourses and their offsets as needed
     };
 
