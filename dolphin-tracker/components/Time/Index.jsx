@@ -74,24 +74,24 @@ function Time() {
 
       <div className="div-world-times">
         <div className="world-clock">
-          <h2 className="h2-world-header">England</h2>
-          <WorldClock timeZone="Europe/London" />
+          <h2 className="h2-world-header">AEDT</h2>
+          <WorldClock timeZone="Australia/Sydney" />
+        </div>
+        <div className="world-clock">
+          <h2 className="h2-world-header">AEST</h2>
+          <WorldClock timeZone="Australia/Queensland" />
+        </div>
+        <div className="world-clock">
+          <h2 className="h2-world-header">Japan</h2>
+          <WorldClock timeZone="Asia/Tokyo" />
         </div>
         <div className="world-clock">
           <h2 className="h2-world-header">France</h2>
           <WorldClock timeZone="Europe/Paris" />
         </div>
         <div className="world-clock">
-          <h2 className="h2-world-header">AEST</h2>
-          <WorldClock timeZone="Australia/Melbourne" />
-        </div>
-        <div className="world-clock">
-          <h2 className="h2-world-header">AEDT</h2>
-          <WorldClock timeZone="Australia/Sydney" />
-        </div>
-        <div className="world-clock">
-          <h2 className="h2-world-header">Japan</h2>
-          <WorldClock timeZone="Asia/Tokyo" />
+          <h2 className="h2-world-header">England</h2>
+          <WorldClock timeZone="Europe/London" />
         </div>
         <div className="world-clock">
           <h2 className="h2-world-header">EST</h2>
@@ -104,11 +104,11 @@ function Time() {
       </div>
 
       <div className="div-world-times">
-        <div>{times.kemptonTime}</div>
-        <div>{times.chantillyTime}</div>
-        <div>{times.aestQldTime}</div>
         <div>{times.kensingtonTime}</div>
+        <div>{times.aestQldTime}</div>
         <div>{times.jpnTime}</div>
+        <div>{times.chantillyTime}</div>
+        <div>{times.kemptonTime}</div>
         <div>{times.newYorkTime}</div>
         <div>{times.pacificStandardTime}</div>
       </div>
