@@ -66,7 +66,7 @@ function DolphinOwner() {
       "Kembla Grange                (AUS)": 18,
       "Windsor                (GB)": 8,
       "Yarmouth                (GB)": 8,
-      // Add more racecourses and their offsets as needed
+      
     };
 
     $(".race__day").each((index, element) => {
@@ -184,6 +184,7 @@ function DolphinOwner() {
         setHorseData(horseData);
        
       };
+      
 
 
   const uniqueDates = [...new Set(horseData.map((horse) => horse.raceDay))];
@@ -352,7 +353,7 @@ function DolphinOwner() {
 return (
   <div>
     
-    <img src="../public/img/godolphin-logo.webp" alt="Godolphin Logo" />
+    <img src="../img/godolphin-logo.webp" alt="Godolphin Logo" />
 
     <div className="toggle-button">
       <button onClick={toggleWorldTimes}>Toggle World Times</button>
