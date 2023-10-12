@@ -1,10 +1,18 @@
 // LoginPage.js
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+// import { useMutation } from "@apollo/client";
+
+// import auth from "../../../utils/auth";
+import { LOGIN_USER } from "../../../utils/mutations";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState(false);
+
+  const [login, { error }] = useMutation(LOGIN_USER);
+
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -50,6 +58,7 @@ const LoginPage = () => {
           onChange={handlePasswordChange}
         />
       </div>
+      
       <div>
         <button onClick={handleLogin}>Submit</button>
       </div>
